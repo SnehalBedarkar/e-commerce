@@ -102,44 +102,43 @@
                         @method('PUT')
                         <div class="mb-3">
                             <label for="name" class="form-label">Name</label>
-                            <input type="text" name="name" id="name" class="form-control" value="{{ old('name', $product->name) }}">
+                            <input type="text" name="name" id="name" class="form-control">
                         </div>
             
                         <div class="mb-3">
                             <label for="price" class="form-label">Price</label>
-                            <input type="text" name="price" id="price" class="form-control" value="{{ old('price', $product->price) }}">
+                            <input type="text" name="price" id="price" class="form-control">
                         </div>
             
                         <div class="mb-3">
                             <label for="description" class="form-label">Description</label>
-                            <textarea name="description" id="description" class="form-control">{{ old('description', $product->description) }}</textarea>
+                            <textarea name="description" id="description" class="form-control"></textarea>
                         </div>
             
                         <div class="mb-3">
                             <label for="stock_quantity" class="form-label">Stock Quantity</label>
-                            <input type="number" name="stock_quantity" id="stock_quantity" class="form-control" value="{{ old('stock_quantity', $product->stock_quantity) }}">
+                            <input type="number" name="stock_quantity" id="stock_quantity" class="form-control">
                         </div>
             
                         <div class="mb-3">
                             <label for="sku" class="form-label">SKU</label>
-                            <input type="text" name="sku" id="sku" class="form-control" value="{{ old('sku', $product->sku) }}">
+                            <input type="text" name="sku" id="sku" class="form-control">
                         </div>
             
                         <div class="mb-3">
                             <label class="form-lable" for="edit_category_id">Category ID</label>
                             <select class="form-control" name="category_id" id="edit_category_id">
                                 @foreach($categories as $category)
-                                    <option value="{{ $category->id }}" {{ $product->category_id == $category->id ? 'selected' : '' }}>
+                                    <option value="{{ $category->id }}">
                                         {{ $category->name }}
                                     </option>
                                 @endforeach
                             </select>
                         </div>
-            
+                        <img width="50px" class="current-image img-fluid " src="{{ asset('storage/') }}" alt="Current Image" />
                         <div class="mb-3">
                             <label for="image" class="form-label"></label>
-                            <img id="output" width="50px" src="{{ asset('storage/'.$product->image) }}" alt="Current Image" class="img-fluid current-image">
-                            <input type="file" onchange="document.querySelector('#output').src=window.URL.createObjectURL(this.files[0])" name="image" id="image" class="form-control">
+                            <input type="file" name="image" id="image" class="form-control">
                         </div>
             
                     </form>
@@ -188,13 +187,38 @@
                 });
             });
 
-            $('.edit-btn').on('click',function(){
-                // first get the data id 
+            $('.edit-btn').on('click', function() {
                 let productId = $(this).data('id');
-                // store this id in modal 
-                $('#editModal').data('id',productId);
-                // and then show the modal 
+                $('#editModal').data('id', productId);
                 $('#editModal').modal('show');
+
+                $.ajax({
+                    url: '/product/edit/' + productId,
+                    type: 'GET',
+                    dataType: 'json', // Corrected 'dateType' to 'dataType'
+                    success: function(response) {
+                        if (response.success) {
+                            $('#name').val(response.product.name);
+                            $('#price').val(response.product.price);
+                            $('#description').val(response.product.description);
+                            $('#stock_quantity').val(response.product.stock_quantity);
+                            $('#sku').val(response.product.sku);
+                            $('#edit_category_id').val(response.product.category_id);
+                            if(response.product.image){
+                                let imageUrl = '{{ asset("storage/") }}' + '/' + response.product.image;
+                                $('#editModal').find('.current-image').attr('src',imageUrl).show();
+                            }else{
+                                $('#editModal').find('.currnet-image').hide();
+                            }
+                        } else {
+                            alert('Error fetching product details.');
+                        }
+                    },
+                    error: function(err) {
+                        console.error('Error fetching product details:', err);
+                        alert('Error fetching product details.');
+                    }
+                });
             });
         });
     </script>
