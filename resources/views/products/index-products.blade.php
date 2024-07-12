@@ -196,8 +196,6 @@
                 // and then show the modal 
                 $('#editModal').modal('show');
             });
-
-            $('#').on('')
         });
     </script>
 </body>
