@@ -17,7 +17,6 @@
                     <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="img-fluid " width="100px" height="100px">
                 @endif
                 <h5 class="card-title">{{ $product->name }}</h5>
-                <h6 class="card-subtitle mb-2 text-muted">SKU: {{ $product->sku }}</h6>
                 <p class="card-text"><strong>ID:</strong> {{ $product->id }}</p>
                 <p class="card-text"><strong>Description:</strong> {{ $product->description }}</p>
                 <p class="card-text"><strong>Stock Quantity:</strong> {{ $product->stock_quantity }}</p>

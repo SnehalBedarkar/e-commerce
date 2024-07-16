@@ -89,11 +89,6 @@
             </div>
 
             <div class="mb-3">
-                <label for="sku" class="form-label">SKU</label>
-                <input type="text" name="sku" id="sku" class="form-control" value="{{ old('sku', $product->sku) }}">
-            </div>
-
-            <div class="mb-3">
                 <label class="form-lable" for="edit_category_id">Category ID</label>
                 <select class="form-control" name="category_id" id="edit_category_id">
                     @foreach($categories as $category)

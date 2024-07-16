@@ -7,6 +7,8 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use function PHPUnit\Framework\fileExists;
+use Illuminate\Support\Facades\Log;
+
 
 class ProductController extends Controller
 {
@@ -25,44 +27,64 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        // Get all data from the request
-        $data = $request->all();
+        try {
+            // Define validation rules
+            $rules = [
+                'name' => 'required|string|max:20',
+                'price' => 'required|numeric|min:0',
+                'description' => 'nullable|string|max:255',
+                'stock_quantity' => 'required|integer|min:0',
+                'category_id' => 'required',
+                'image' => 'nullable|image|max:2048',
+            ];
 
-        // Define the validation rules
-        $rules = [
-            'name' => 'required|string|max:20',
-            'price' => 'required|numeric|min:0',
-            'description' => 'nullable|string|max:255',
-            'stock_quantity' => 'required|integer|min:0',
-            'sku' => 'required|string|alpha_num|unique:products,sku|max:50',
-            'category_id' => 'required|integer',
-            'image' => 'nullable|image|max:2048',
-        ];
+            // Validate input data
+            $validator = Validator::make($request->all(), $rules);
 
-        // Validate the input data
-        $validator = Validator::make($data, $rules);
+            // Check if validation fails
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'errors' => $validator->errors()
+                ], 422); // Unprocessable Entity status code
+            }
 
-        // Check if validation fails
-        if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
+            // Create a new Product instance
+            $product = new Product();
+            $product->name = $request->name;
+            $product->price = $request->price;
+            $product->description = $request->description;
+            $product->stock_quantity = $request->stock_quantity;
+            $product->category_id = $request->category_id;
+
+            // Handle image upload if present
+            if ($request->hasFile('image')) {
+                $image = $request->image;
+                $path = $image->store('images', 'public');
+                $product->image = $path;
+            }
+
+            // Save the product
+            $product->save();
+
+            // Return a JSON response indicating success
+            return response()->json([
+                'success' => true,
+                'message' => 'Product added successfully!',
+                'data' => $product // Optionally, you can return the saved product data
+            ]);
+        } catch (\Exception $e) {
+            // Log the exception
+            Log::error('Error is storing product ' . $e->getMessage());
+            // Return a JSON response indicating failure
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to store product. Please try again later.',
+                'error' => $e->getMessage() // Optionally, include the detailed error message
+            ], 500); // Internal Server Error status code
         }
-
-        // Create a new Product instance
-        $product = new Product();
-        $product->name = $request->name;
-        $product->price = $request->price;
-        $product->description = $request->description;
-        $product->stock_quantity = $request->stock_quantity;
-        $product->sku = $request->sku;
-        $product->category_id = $request->category_id;
-        if ($request->hasFile('image')) {
-            $image = $request->image;
-            $path = $image->store('images', 'public');
-            $product->image = $path;
-        }
-        $product->save();
-        return redirect()->route('products.index')->with('status', 'Product created successfully.');
     }
+
 
     public function show(string $id)
     {
@@ -98,33 +120,68 @@ class ProductController extends Controller
 
     public function update(string $id, Request $request)
     {
+        // Validation rules
         $rules = [
             'name' => 'required|max:255',
             'price' => 'required|numeric',
-            'description' => 'string|nullable',
+            'description' => 'nullable|string',
             'stock_quantity' => 'required|numeric',
-            'sku' => 'required|string|alph_num|unique:products,sku' . $id,
+            'category_id' => 'required|integer',
             'image' => 'image|max:2048'
         ];
 
-        $product = Product::findOrFail($id);
-        $product->name = $request->name;
-        $product->price = $request->price;
-        $product->description = $request->description;
-        $product->stock_quantity = $request->stock_quantity;
-        $product->sku = $request->sku;
-        if ($request->hasFile('image')) {
-            $imagePath = public_path('storage/' . $product->image);
-            if (fileExists($imagePath)) {
-                @unlink($imagePath);
-            }
-            $image = $request->file('image');
-            $path = $image->store('images', 'public');
-            $product->image = $path;
+        // Validate the request
+        $validator = Validator::make($request->all(), $rules);
+
+        // Check for validation errors
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ], 400); // Bad Request status code
         }
-        $product->save();
-        return redirect()->route('products.index')->with('status', 'product updated successfully');
+
+        try {
+            // Find the product or throw an exception if not found
+            $product = Product::findOrFail($id);
+
+            // Update product attributes
+            $product->name = $request->name;
+            $product->price = $request->price;
+            $product->description = $request->description;
+            $product->stock_quantity = $request->stock_quantity;
+            $product->category_id = $request->category_id;
+            // Handle image upload if a new image is provided
+            if ($request->hasFile('image')) {
+                // Delete the old image if it exists
+                $imagePath = public_path('storage/' . $product->image);
+                if (file_exists($imagePath)) {
+                    @unlink($imagePath);
+                }
+
+                // Store the new image
+                $image = $request->file('image');
+                $path = $image->store('images', 'public');
+                $product->image = $path;
+            }
+
+            // Save the product changes
+            $product->save();
+
+            // Return success response with updated product data
+            return response()->json([
+                'success' => true,
+                'product' => $product
+            ]);
+        } catch (\Exception $e) {
+            // Return error response if an exception occurs
+            return response()->json([
+                'status' => false,
+                'message' => 'Error updating product: ' . $e->getMessage()
+            ], 500); // Internal Server Error status code
+        }
     }
+
 
     public function destroy(string $id)
     {

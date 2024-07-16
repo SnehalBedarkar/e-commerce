@@ -72,13 +72,6 @@
                 @enderror
             </div>
             
-            <div class="mb-3">
-                <label for="sku" class="form-label">SKU</label>
-                <input type="text" class="form-control @error('sku') is-invalid @enderror" id="sku" name="sku" value="{{ old('sku') }}">
-                @error('sku')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-            </div>
 
             <div class="mb-3">
                 <label for="category_id">Category ID</label>
