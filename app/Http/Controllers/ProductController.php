@@ -14,9 +14,31 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::with('category')->get();
+        $products = Product::all();
         $categories = Category::all();
-        return view('products.index-products', compact('products', 'categories'));
+        return view('Dashboard.products',compact('products','categories')); 
+    }
+
+    public function productsByCategory(int $id)
+    {
+        // Fetch products based on the provided category ID
+        $category = Category::find($id);
+
+        if (!$category) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Category not found'
+            ], 404);
+        }
+
+        // Assuming Category has a 'products' relationship
+        $products = $category->products;
+
+        return response()->json([
+            'success' => true,
+            'category' => $category,
+            'products' => $products
+        ]);
     }
 
     public function create()
@@ -72,7 +94,7 @@ class ProductController extends Controller
                 'success' => true,
                 'message' => 'Product added successfully!',
                 'data' => $product // Optionally, you can return the saved product data
-            ]);
+            ], 200);
         } catch (\Exception $e) {
             // Log the exception
             Log::error('Error is storing product ' . $e->getMessage());

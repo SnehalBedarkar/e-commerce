@@ -10,11 +10,20 @@ use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
+
     public function index()
     {
-        $categories = Category::with('products')->get();
-        return view('categories.index-categories', compact('categories'));
+        $categories = Category::all();
+        return view('Dashboard.categories',compact('categories'));
     }
+
+    // public function listOfCategories(){
+    //     $categories = Category::all();
+    //     return response()->json([
+    //         'success' => true,
+    //         'categories' => $categories
+    //     ]);
+    // }
 
     public function create()
     {
@@ -41,9 +50,10 @@ class CategoryController extends Controller
         $category = Category::create($data);
 
         if ($category) {
-            return redirect()->route('categories.index')->with('status', 'Category created successfully');
-        } else {
-            return back()->with('error', 'Failed to create category')->withInput();
+            return response()->json([   
+                'success' => true,
+                'message' => 'category created successfully',
+            ]);
         }
     }
 }

@@ -1,0 +1,86 @@
+ /* Custom styles can be added here */
+ .header {
+    padding: 10px 0;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+.functionalities ul {
+    display: flex;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+.functionalities {
+    text-align: right; /* Align navigation to the right */
+}
+.nav {
+    display: flex;
+    align-items: center; /* Align items vertically in the nav */
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+.nav-item {
+    margin-right: 10px; /* Adjust spacing between navigation items */
+}
+
+.btn-primary {
+    background-color: #007bff; /* Blue primary button color */
+    color: #fff; /* White text color */
+    border-color: #007bff; /* Matching border color */
+    transition: background-color 0.3s ease; /* Smooth transition on hover */
+}
+
+
+.btn-primary:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+}
+
+.btn-outline-danger {
+    color: #dc3545; /* Red danger button text color */
+    border-color: #dc3545; /* Matching border color */
+}
+
+.btn-outline-danger:hover {
+    color: #fff; /* White text on hover */
+    background-color: #dc3545; /* Red background on hover */
+    border-color: #dc3545; /* Matching border color on hover */
+}
+.nav-link {
+    text-decoration: none; /* Remove underline from links */
+}
+.product-list {
+    margin-top: 20px;
+}
+.product-item {
+    display: flex;
+    border: 1px solid #ccc;
+    padding: 16px;
+    margin-bottom: 16px;
+    /* width: 300px;  */
+}
+
+.product-content {
+    flex: 1; /* Takes up remaining space in the flex container */
+}
+
+.product-item h3, .product-item p {
+    margin: 0 0 8px 0;
+}
+
+.product-image {
+    width: 100px; /* Adjust image width as needed */
+    align-self: flex-start; /* Align image to the start (top) of its container */
+    margin-left: auto; /* Pushes the image to the right */
+}
+
+.buttons {
+    margin-top: auto; /* Push buttons to the bottom of their container */
+    display: flex;
+    /* flex-direction: column; */
+    gap: 10px;
+    align-items: flex-end;
+}
