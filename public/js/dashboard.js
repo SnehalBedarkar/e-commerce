@@ -1,0 +1,19 @@
+$(document).ready(function(){
+    $.ajaxSetup({
+        headers:{
+            'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $('#logout_button').on('click',function(){
+        $.ajax({
+            url:'auth/logout',
+            type:'POST',
+            success:function(response){
+                if(response.success){
+                    console.log(response.success);
+                }
+            }
+        })
+    });
+});

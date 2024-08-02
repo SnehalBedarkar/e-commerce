@@ -230,4 +230,8 @@ class ProductController extends Controller
             return response()->json(['success' => false, 'message' => 'Error deleting product.'], 500);
         }
     }
+
+    public function buyNow(){
+        
+    }
 }

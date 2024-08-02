@@ -17,4 +17,11 @@ class Order extends Model
     {
         return $this->belongsTo(User::class, 'foreign_key', 'user_id');
     }
+
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'order_product')
+                    ->withPivot('quantity')
+                    ->withTimestamps();
+    }
 }

@@ -11,13 +11,7 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $products = Product::all();
-        $categories = Category::all();
-
-        return view('home.home', [
-            'products' => $products,
-            'categories' => $categories,
-        ]);
+       return view('home.index');
     }
 
     public function indexCategoryWise($id)
@@ -46,5 +40,10 @@ class HomeController extends Controller
                 'message' => 'Error fetching category products. Please check the logs for details.'
             ], 500);
         }
+    }
+
+    public function productList(){
+        $products = Product::all();
+        return view('home.products',compact('products'));
     }
 }
