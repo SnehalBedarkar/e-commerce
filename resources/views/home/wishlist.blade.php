@@ -2,6 +2,10 @@
 
 @section('title', 'Wishlist')
 
+@push('styles')
+   <link rel="stylesheet" href="{{ asset('css/home/wishlist.css') }}">
+@endpush
+
 @section('header')
     @include('partials.home.header')
 @endsection
@@ -24,5 +28,5 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('js/home.js') }}"></script>
+    <script src="{{ asset('js/home/wishlist.js') }}"></script>
 @endpush

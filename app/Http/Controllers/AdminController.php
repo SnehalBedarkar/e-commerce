@@ -10,7 +10,9 @@ class AdminController extends Controller
 {
     public function adminPage()
     {
-        return view('dashboard.index');
+        $activeUsers = User::where('is_active','1')->get();
+        $activeUsersCount = $activeUsers->count();
+        return view('dashboard.index',compact('activeUsersCount'));
     }
 
     public function usersList()
@@ -21,5 +23,15 @@ class AdminController extends Controller
             'users' => $users
         ]);
     }
+
+    public function activeUsers(){
+        $activeUsers = User::where('is_active','1')->get();
+        $activeUsersCount = $activeUsers->count();
+        return response()->json([
+            'success' => true,
+            'activeUsersCount' => $activeUsersCount
+        ]);
+    }
+
 
 }

@@ -3,7 +3,8 @@
 @section('title', 'Cart')
 
 @push('styles')
-<link rel="stylesheet" href="{{ asset('css/cart.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/home/cart.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/sidebar.css') }}">
 @endpush
 
 @section('header')
@@ -18,10 +19,6 @@
 
 <div id="container">
     <h1>Your Cart</h1>
-    <div>
-        <span></span>
-        <span></span>
-    </div>
     <div class="row">
         <div class="col-md-8" id="cart-container">
             @forelse($cartItems as $item)
@@ -62,25 +59,28 @@
     {{-- Price Detail Card  --}}
         @unless ($cartItems->isEmpty())
         <div class="col-md-4" id="price-datails">
-            <div class="card border p-2">
-                <h4>Price Details</h4>
+            <div class="card">
+                <div class="car-header p-2">
+                    <h5>Price Details</h5>
+                </div>
                 <hr>
-            
-                <p id="subtotal">Price <span id="items_count">({{ $itemCount }} items)</span> <span id="subtotal-value">{{ $subtotal }}</span> </p>
-
-                <!-- Display delivery charges -->
-                <p id="deliveryCharges">Delivery Charges: Rs {{ $deliveryCharges }}</p>
-
-                <hr>
-                <!-- Display the total price -->
-                <h5 id="total">Total: Rs <span id="total-value">{{ $total }}</span> </h5>
+                <div class="card-body">
+                    <p id="subtotal">Price <span id="items_count">({{ $itemCount }} items)</span> <span id="subtotal-value">{{ $subtotal }}</span> </p>
+    
+                    <!-- Display delivery charges -->
+                    <p id="deliveryCharges">Delivery Charges: Rs {{ $deliveryCharges }}</p>
+    
+                </div>
+                <div class="card-footer">
+                    <h5 id="total">Total: Rs <span id="total-value">{{ $total }}</span> </h5>
+                </div>
             </div>
         </div>
         @endunless
         
         @unless($cartItems->isEmpty())
-            <div class="col-12 text-end">
-                <a class="btn btn-warning" href="{{ route('cart.place.order') }}">Place Order</a>
+            <div class="col-12 text-end mt-2">
+                <a class="btn btn-warning" href="{{ route('cart.place.order') }}">Checkout</a>
             </div>
         @endunless
 </div>
@@ -95,8 +95,7 @@
 @endsection
 
 @push('scripts')
-    
-    <script src="{{ asset('js/home.js') }}"></script>
+    <script src="{{ asset('js/home/cart.js') }}"></script>
 @endpush
 
 <script>

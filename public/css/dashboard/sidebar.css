@@ -1,0 +1,35 @@
+/* Sidebar styles */
+.sidebar {
+    background: linear-gradient(to bottom, #f8f9fa, #e9ecef); /* Gradient background */
+    border-right: 1px solid #dee2e6; /* Right border */
+    height: 100vh; /* Full height */
+    padding: 20px; /* Padding inside the sidebar */
+}
+
+.nav-link {
+    font-size: 16px; /* Font size for links */
+    display: flex; /* Flexbox for icon and text alignment */
+    align-items: center; /* Center align items vertically */
+    padding: 10px; /* Padding around links */
+    border-radius: 8px; /* Rounded corners for links */
+    transition: background-color 0.3s, color 0.3s; /* Smooth transition for hover effects */
+}
+
+.nav-link i {
+    margin-right: 10px; /* Space between icon and text */
+    font-size: 18px; /* Icon size */
+}
+
+.nav-link:hover {
+    background-color: #007bff; /* Background color on hover */
+    color: #fff; /* Text color on hover */
+}
+
+.nav-link.active {
+    background-color: #0056b3; /* Background color for active link */
+    color: #fff; /* Text color for active link */
+}
+
+.nav-item.mb-2 {
+    margin-bottom: 10px; /* Space between items */
+}

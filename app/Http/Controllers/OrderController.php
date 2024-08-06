@@ -11,6 +11,30 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
+   public function index(){
+      $orders = Order::all();
+      return view('dashboard.orders',compact('orders'));
+   }
+
+   public function chartData()
+   {
+      // Example: Get orders and prepare chart data
+      $orders = Order::all();
+      
+      // For simplicity, assume you are using order creation months as labels and counts as values
+      $labels = $orders->groupBy(function($date) {
+         return $date->created_at->format('Y-m-d'); // Group by month and year
+      })->keys();
+
+      $values = $orders->groupBy(function($date) {
+         return $date->created_at->format('Y-m-d');
+      })->map->count()->values();
+      
+      return response()->json([
+         'labels' => $labels,
+         'values' => $values
+      ]);
+   }
 
    public function userSpecificOrders()
    {
@@ -25,26 +49,26 @@ class OrderController extends Controller
    }
   
 
-   public function ordersStatus(Request $request)
-   {
-      $userId = Auth::id();
-      // Capture all incoming request data
-      $data = $request->all();
+   // public function ordersStatus(Request $request)
+   // {
+   //    $userId = Auth::id();
+   //    // Capture all incoming request data
+   //    $data = $request->all();
       
-      // Extract statuses from the data array
-      $statuses = $data['statuses'] ?? [];
+   //    // Extract statuses from the data array
+   //    $statuses = $data['statuses'] ?? [];
       
-      // Fetch orders based on the selected statuses
-      $orders = Order::whereIn('status', $statuses)
-                     ->where('user_id',$userId)->get();
+   //    // Fetch orders based on the selected statuses
+   //    $orders = Order::whereIn('status', $statuses)
+   //                   ->where('user_id',$userId)->get();
 
-      // Return the fetched orders in the response
-      return response()->json([
-         'success' => true,
-         'message' => 'Orders fetched successfully',
-         'orders' => $orders
-      ]);
-   }
+   //    // Return the fetched orders in the response
+   //    return response()->json([
+   //       'success' => true,
+   //       'message' => 'Orders fetched successfully',
+   //       'orders' => $orders
+   //    ]);
+   // }
 
    public function addOrder(Request $request)
    {

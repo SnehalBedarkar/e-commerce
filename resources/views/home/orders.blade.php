@@ -2,6 +2,10 @@
 
 @section('title', 'Orders')
 
+@push('styles')
+     <link rel="stylesheet" href="{{ asset('css/home/orders.css') }}">
+@endpush
+
 @section('header')
     @include('partials.home.header')
 @endsection
@@ -13,7 +17,7 @@
 @section('content')
     <div id="container">
         <div class="row">
-            <div class="col-3">
+            {{-- <div class="col-3">
                 <div class="card">
                     <div class="card-header">
                         <h4>Filters</h4>
@@ -41,14 +45,13 @@
                         </form>
                     </div>
                 </div>
-            </div>
-            <div class="col-9" id="main_content">
+            </div> --}}
+            <div class="col-12" id="main_content">
                 <table id="orders_table" class="table table-striped table-bordered">
                     <thead>
                         <tr>
                             <th>Order Number</th>
                             <th>Product Name</th>
-
                             <th>Quantity</th>
                             <th>Price</th>
                             <th>Status</th>
@@ -86,5 +89,5 @@
 
 
 @push('scripts')
-    <script src="{{ asset('js/home.js') }}"></script>
+    <script src="{{ asset('js/home/orders.js') }}"></script>
 @endpush

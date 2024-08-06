@@ -14,20 +14,12 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::all();
-        return view('Dashboard.categories',compact('categories'));
+        return view('dashboard.categories',compact('categories'));
     }
 
-    // public function listOfCategories(){
-    //     $categories = Category::all();
-    //     return response()->json([
-    //         'success' => true,
-    //         'categories' => $categories
-    //     ]);
-    // }
-
-    public function create()
-    {
-        return view('categories.create-category');
+    public function userIndex(){
+        $categories = Category::with('products')->get();
+        return view('home.categories',compact('categories'));
     }
 
     public function store(Request $request)

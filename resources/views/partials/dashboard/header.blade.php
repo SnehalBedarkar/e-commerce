@@ -19,7 +19,7 @@
                             <a class="nav-link" href="#">{{ explode(' ', Auth::user()->name)[0] }}</a>
                         </li>
                         <li class="nav-item">
-                            <button type="button" class="btn btn-primary" id="logout_button">Logout</button>
+                            <button type="button" class="btn btn-primary" data-user-id="{{ Auth::id() }}" id="logout_button">Logout</button>
                         </li>
                     @endguest
                 </ul>

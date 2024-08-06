@@ -15,8 +15,11 @@
                             <button type="button" class="btn btn-primary" data-bs-target="#registerModal" data-bs-toggle="modal">Register</button>
                         </li>
                     @else
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">{{ explode(' ', Auth::user()->name)[0] }}</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown=toggle"  data-bs-toggle="dropdown" href="#" >{{ explode(' ', Auth::user()->name)[0] }}</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{{ route('user.show',Auth::id()) }}">Profile</a></li>
+                            </ul>
                         </li>
                         <li class="nav-item">
                             <button type="button" class="btn btn-primary" id="logout_button" data-bs-target="#logoutModal" data-bs-toggle="modal">Logout</button>

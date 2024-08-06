@@ -140,7 +140,7 @@ class CartController extends Controller
 
             // Calculate total for all items in the cart
             $cartItems = CartItem::where('user_id', $userId)->get();
-            $subtotal = $cartItems->sum(function ($item) {
+            $subtotal = $cartItems->sum(function ($item) {  
                 $productPrice = Product::where('id', $item->product_id)->value('price');
                 return $productPrice * $item->quantity;
             });

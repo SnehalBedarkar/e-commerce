@@ -10,6 +10,10 @@ use App\Http\Controllers\AuthController;
 use App\http\Controllers\OrderController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PayPalController;
+
 use App\Http\Middleware\AuthAdmin;
 use App\Http\Middleware\AuthUser;
 
@@ -47,27 +51,43 @@ Route::get('/categories/{id}/products', [ProductController::class, 'productsByCa
 
 // Category Routes 
 Route::get('/categories/index/', [CategoryController::class, 'index'])->name('categories.index');
+
+Route::get('/categories/user',[CategoryController::class, 'userIndex'])->name('categories.user');
 Route::get('/category/create', [CategoryController::class, 'create'])->name('categories.create');
 Route::post('/category/store', [CategoryController::class, 'store'])->name('categories.store');
 Route::get('/category/{id}/products', [HomeController::class,])->name('category.products');
 
 // Users Routes
-Route::get('/users/index', [UserController::class, 'index'])->name('user.index');
+Route::get('/users/index', [UserController::class, 'index'])->name('users.index');
+Route::get('/users/chart',[UserController::class, 'chartData'])->name('users.chart');
 Route::get('/user/show/{id}', [UserController::class, 'show'])->name(('user.show'));
 Route::get('/user/edit{id}', [UserController::class, 'edit'])->name('user.edit');
 Route::post('/user/update{id}', [UserController::class, 'update'])->name('user.update');
 Route::delete('/user/delete', [UserController::class, 'destroy'])->name('user.destroy');
+Route::delete('/users/multiple/delete',[UserController::class, 'multipleDelete'])->name('users.multiple.delete');
 Route::get('/active/users', [UserController::class, 'activeUsers'])->name('users.active');
 
 // Admin Routes
 Route::get('/adminPage', [AdminController::class, 'adminPage'])->name('admin.dashboard');
+Route::get('/active/users',[AdminController::class, 'activeUsers'])->name('active.users');
 Route::get('/users',[AdminController::class, 'usersList'])->name('admin.users.list');
 
 // Orders Routes
 Route::get('/orders',[OrderController::class, 'index'])->name('orders.index');
+Route::get('/orders/chart',[OrderController::class, 'chartData'])->name('orders.chart');
 Route::post('/order/add',[OrderController::class, 'addOrder'])->name('order.add');
 Route::get('/users/orders',[OrderController::class, 'userSpecificOrders'])->name('user.orders');
 Route::get('/orders/status',[OrderController::class, 'ordersStatus'])->name('orders.status');
 
 Route::get('/checkout',[CheckoutController::class, 'showCheckout'])->name('checkout');
+Route::put('/checkout/update',[CheckoutController::class, 'checkoutUpdate'])->name('checkout.update');
 Route::get('/order/placed',[CheckoutController::class, 'orderPlaced'])->name('order.placed');
+
+
+Route::get('/wishlist',[WishlistController::class, 'userSpecificWishlist'])->name('wishlist.user');
+
+
+Route::post('/payment',[PaymentController::class, 'payment'])->name('payment');
+
+
+
