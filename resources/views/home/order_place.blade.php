@@ -19,8 +19,7 @@
         <div class="text-center">
             <h1 class="mb-4">Thank You for Your Order!</h1>
             <p class="lead">Your order has been successfully placed.</p>
-            <p class="text-muted">Order Number: <strong></strong></p>
-
+            <p class="text-muted" id="order_number">Order Number: <strong>{{ $order->order_number }}</strong></p>
             <div class="order-details mt-4">
                 <h4>Order Summary</h4>
                 <div class="card">
@@ -58,5 +57,5 @@
 @endsection
 
 @push('scripts')
-    <script src="#"></script>
+    <script src="{{ asset('js/home/order_placed.js') }}"></script>
 @endpush

@@ -125,7 +125,8 @@ $(document).ready(function(){
         })
     }
 
-
-    updateActiveUsersCount();
+    $('#refresh_button').on('click',function(){
+        updateActiveUsersCount();
+    })
     
 });

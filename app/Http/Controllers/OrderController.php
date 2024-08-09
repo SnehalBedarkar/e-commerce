@@ -6,15 +6,22 @@ use App\Models\CartItem;
 use App\Models\Product;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
+
+   // method for all orders
+
    public function index(){
       $orders = Order::all();
       return view('dashboard.orders',compact('orders'));
    }
+
+
+   // method for chart of orders
 
    public function chartData()
    {
@@ -36,6 +43,8 @@ class OrderController extends Controller
       ]);
    }
 
+   // method for userspecific orders
+
    public function userSpecificOrders()
    {
       $userId = Auth::id();
@@ -49,35 +58,17 @@ class OrderController extends Controller
    }
   
 
-   // public function ordersStatus(Request $request)
-   // {
-   //    $userId = Auth::id();
-   //    // Capture all incoming request data
-   //    $data = $request->all();
-      
-   //    // Extract statuses from the data array
-   //    $statuses = $data['statuses'] ?? [];
-      
-   //    // Fetch orders based on the selected statuses
-   //    $orders = Order::whereIn('status', $statuses)
-   //                   ->where('user_id',$userId)->get();
-
-   //    // Return the fetched orders in the response
-   //    return response()->json([
-   //       'success' => true,
-   //       'message' => 'Orders fetched successfully',
-   //       'orders' => $orders
-   //    ]);
-   // }
+   // method for add order 
 
    public function addOrder(Request $request)
    {
       $data = $request->all();
 
-      $userId = $data['user_id'];
+      $paymentId = $data['payment_id'];
+      $userId = Auth::id();
 
       $rules = [
-         'user_id' => 'required|integer',
+         'payment_id' => 'required|string',
       ];
 
       $validator = Validator::make($data,$rules);
@@ -90,6 +81,7 @@ class OrderController extends Controller
          ]);
       }
 
+      // find cartItems by userId
 
       $cartItems = CartItem::where('user_id', $userId)->get();
       if($cartItems){
@@ -97,36 +89,74 @@ class OrderController extends Controller
             $productId = $item->product->id;
          }
       }
+
+
+      
       $totalPrice = $cartItems->sum(function($item) {
          $product = Product::find($item->product_id); // Assuming you have a Product model and it's related by product_id
          return $item->quantity * ($product ? $product->price : 0); // Ensure price is valid
-     });
+      });
+
+
       // create new Order 
 
       $order = new Order();
       $order->user_id = $userId;
       $order->order_number = 'ORD-' . strtoupper(uniqid()); 
       $order->total = $totalPrice;
+      $order->razorpay_payment_id = $paymentId;
       $order->status = 'pending';
       $order->save();
 
-      foreach ($cartItems as $item) {
+      foreach ($cartItems as $item) {  
          $order->products()->attach($item->product_id, ['quantity' => $item->quantity]);
       }
 
       CartItem::where('user_id', $userId)->delete();
   
-      if($order){
-         $orderNumber = $order->number;
-         $redirectUrl = route('order.placed',[ 'order_number'=> $orderNumber]);
-      }
+      session()->flash('order_id',$order->id);
 
 
-      
       return response()->json([
          'success' => true,
-         'message' => 'order placed successfully',
-         'redirect_url' => $redirectUrl,
+         'message' => 'order created successfully',
+         'redirect_url' => '/order/placed', 
       ]);
+   }  
+
+
+   
+   public function orderPlaced()
+   {
+      $orderId = session('order_id');
+      $order = Order::find($orderId);
+      return view('home.order_place', compact('order'));
+   }
+
+
+
+   public function orderDestroy(Request $request){
+      $data = $request->all();
+
+      $rules = [
+         'order_id' => 'required|integer',
+      ];
+
+      $orderId = $data['order_id'];
+
+      $order = Order::find($orderId);
+      if($order){
+         $order->delete();
+         return response()->json([
+            'success' => true,
+            'message' => 'order deleted successfully'
+         ]);
+      }else{
+         return response()->json([
+            'success' => false,
+            'message' => 'order not found'
+         ]);
+      }
+
    }
 }

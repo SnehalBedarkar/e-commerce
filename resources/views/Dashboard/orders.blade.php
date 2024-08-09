@@ -15,26 +15,40 @@
         <h4>Orders</h4>
         <div class="row">
             <div class="col-12">
-                <table class="table table-bordered table-striped table-hover table-responsive" id="orders_table">
+                <table class="table table-bordered table-striped table-hover table-dark" id="orders_table">
                     <thead>
                         <tr>
+                            <th>Order ID</th>
                             <th>Order Number</th>
-                            <th>Total</th>
+                            <th>Prouduct Name</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
                             <th>Status</th>
-                            <th>Actions </th>
+                            <th>Total</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($orders as $order )
-                        <tr data-id="{{ $order->id }}">
-                            <td>{{ $order->order_number }}</td>
-                            <td>{{ $order->total }}</td>
-                            <td>{{ $order->status }}</td>
-                            <td>
-                                <button class="btn btn-primary btn-sm" >View</button>
-                                <button class="btn btn-danger btn-sm">Delete</button>
-                            </td>
-                        </tr>
+                        @foreach ($orders as $order)
+                            @foreach ($order->products as $index => $product)
+                                <tr data-id="{{ $order->id }}">
+                                    @if ($index == 0)
+                                        <td rowspan="{{ $order->products->count() }}">{{ $order->id }}</td>
+                                        <td rowspan="{{ $order->products->count() }}">{{ $order->order_number }}</td>
+                                    @endif
+                                    <td>{{ $product->name }}</td>
+                                    <td>{{ $product->pivot->quantity }}</td>
+                                    <td>Rs {{ number_format($product->price, 2) }}</td>
+                                    @if ($index == 0)
+                                        <td rowspan="{{ $order->products->count() }}">{{ $order->status }}</td>
+                                        <td rowspan="{{ $order->products->count() }}">Rs {{ number_format($order->total, 2) }}</td>
+                                    @endif
+                                    <td>
+                                        <button class="btn btn-primary">view</button>
+                                        <button class="btn btn-secondary">Delete</button>
+                                    </td>
+                                </tr>
+                            @endforeach
                         @endforeach
                     </tbody>
                 </table>
@@ -51,7 +65,6 @@
     @include('partials.dashboard.delete_modal')
     @include('partials.dashboard.view_modal')
 @endsection
-
 
 @push('scripts')
     <script src="{{ asset('js/dashboard/orders.js') }}"></script>

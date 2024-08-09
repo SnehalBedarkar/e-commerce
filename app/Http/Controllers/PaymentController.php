@@ -19,9 +19,6 @@ class PaymentController extends Controller
             'receipt'         => 'order_rcptid_' . time(),
             'payment_capture' => 1 // Capture the payment immediately
         ));
-
-        dd($order);
-
         return view('payment', compact('order'));
     }
 

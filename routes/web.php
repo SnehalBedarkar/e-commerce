@@ -12,7 +12,6 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\PaymentController;
-use App\Http\Controllers\PayPalController;
 
 use App\Http\Middleware\AuthAdmin;
 use App\Http\Middleware\AuthUser;
@@ -24,11 +23,16 @@ Route::get('/products/list',[HomeController::class, 'productList'])->name('produ
 
 
 // Authorisation Routes
-Route::get('/auth/login/form', [AuthController::class, 'showLoginForm'])->name('auth.login.form');
-Route::get('/auth/register/form', [AuthController::class, 'showRegistraitionForm'])->name('auth.register.form');
-Route::post('/auth/login', [AuthController::class, 'login'])->name('auth.login');
+
+Route::any('/auth/login', [AuthController::class, 'login'])->name('auth.login');
 Route::post('/auth/register', [AuthController::class, 'register'])->name('auth.register');
 Route::post('/auth/logout', [AuthController::class, 'logout'])->name('auth.logout');
+Route::get('/auth/forgot/password/form',[AuthController::class, 'showForgotPassword'])->name('auth.forgot.password.form');
+Route::post('/auth/forgot/password',[AuthController::class, 'forgotPassword'])->name('auth.forgot.password');
+Route::post('/auth/verify/otp',[AuthController::class, 'verifyOtp'])->name('auth.verify.otp');
+Route::get('/auth/register_new_password',[AuthController::class, 'passwordReset'])->name('auth.register.new.password');
+
+
 
 
 
@@ -51,7 +55,6 @@ Route::get('/categories/{id}/products', [ProductController::class, 'productsByCa
 
 // Category Routes 
 Route::get('/categories/index/', [CategoryController::class, 'index'])->name('categories.index');
-
 Route::get('/categories/user',[CategoryController::class, 'userIndex'])->name('categories.user');
 Route::get('/category/create', [CategoryController::class, 'create'])->name('categories.create');
 Route::post('/category/store', [CategoryController::class, 'store'])->name('categories.store');
@@ -59,12 +62,13 @@ Route::get('/category/{id}/products', [HomeController::class,])->name('category.
 
 // Users Routes
 Route::get('/users/index', [UserController::class, 'index'])->name('users.index');
+Route::get('/users/search',[UserController::class, 'usersSearch'])->name('users.search');
 Route::get('/users/chart',[UserController::class, 'chartData'])->name('users.chart');
 Route::get('/user/show/{id}', [UserController::class, 'show'])->name(('user.show'));
 Route::get('/user/edit{id}', [UserController::class, 'edit'])->name('user.edit');
 Route::post('/user/update{id}', [UserController::class, 'update'])->name('user.update');
 Route::delete('/user/delete', [UserController::class, 'destroy'])->name('user.destroy');
-Route::delete('/users/multiple/delete',[UserController::class, 'multipleDelete'])->name('users.multiple.delete');
+Route::get('/users/multiple-delete',[UserController::class, 'multipleDelete'])->name('users.multiple.delete');
 Route::get('/active/users', [UserController::class, 'activeUsers'])->name('users.active');
 
 // Admin Routes
@@ -78,10 +82,11 @@ Route::get('/orders/chart',[OrderController::class, 'chartData'])->name('orders.
 Route::post('/order/add',[OrderController::class, 'addOrder'])->name('order.add');
 Route::get('/users/orders',[OrderController::class, 'userSpecificOrders'])->name('user.orders');
 Route::get('/orders/status',[OrderController::class, 'ordersStatus'])->name('orders.status');
+Route::get('/order/placed',[OrderController::class, 'orderPlaced'])->name('order.placed');
+Route::delete('/order/delete',[OrderController::class, 'orderDestroy'])->name('order.destroy');
 
 Route::get('/checkout',[CheckoutController::class, 'showCheckout'])->name('checkout');
 Route::put('/checkout/update',[CheckoutController::class, 'checkoutUpdate'])->name('checkout.update');
-Route::get('/order/placed',[CheckoutController::class, 'orderPlaced'])->name('order.placed');
 
 
 Route::get('/wishlist',[WishlistController::class, 'userSpecificWishlist'])->name('wishlist.user');

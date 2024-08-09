@@ -117,10 +117,4 @@ class CheckoutController extends Controller
             'deliveryCharges' => $deliveryCharges,
         ]);
     }
-
-    public function orderPlaced() {
-        $userId = Auth::id();
-        $orders = Order::where('user_id', $userId)->get(); // Fetch the orders for the authenticated user
-        return view('home.order_place', ['orders' => $orders]); // Pass the orders to the view
-    }
 }

@@ -33,6 +33,7 @@ $(document).ready(function(){
             data:formData,
             success:function(response){
                 if(response.success){
+                    console.log(response.success);
                     $("#login_modal").modal('hide');
                     window.location.href = response.redirect_url;
                 }else if(response.errors){
@@ -66,7 +67,8 @@ $(document).ready(function(){
             data:formData,
             success:function(response){
                 if(response.success){
-                    window.location.href = response.redirect_url;
+                    $('#register_modal').modal('hide');
+                    $('#login_modal').modal('show');
                 }else{
                     let errors = response.errors;
                     errors.forEach((error)=>{

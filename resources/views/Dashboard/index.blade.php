@@ -30,14 +30,14 @@
             </div>
             <div class="row">
                 <div class="col-3">
-                    <div class="card">
+                    <div class="card mt-5">
                         <div class="card-header">
                             <h4>Active Users</h4>
                         </div>
                         <div class="card-body">
                             <div>
                                 <p id="activeUserCount">{{ $activeUsersCount }}</p>
-                                <button id="refreshButton" onclick="updateActiveUsersCount()" class="btn btn-primary">
+                                <button id="refresh_button" class="btn btn-primary ">
                                     <i class="fas fa-sync-alt"></i> Refresh
                                 </button>
                             </div>

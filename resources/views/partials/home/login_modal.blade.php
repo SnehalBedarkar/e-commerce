@@ -17,9 +17,14 @@
                     <input type="password" class="form-control" id="login_password" name="login_password" autocomplete="current-password" required>
                     <div id="login_password_error" class="text-danger"></div>
                 </div>
+                <div class="form-group mt-2">
+                  <input type="checkbox" id="remember_me" name="remember_me">
+                  <label for="remember_me" class="form-lable">Remember Me</label>
+                </div>
             </form>
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer d-flex justify-content-between align-items-center">
+          <a href="{{ route('auth.forgot.password.form') }}" class="text-primary" style="font-size: 0.875rem;">Forgot Password?</a>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           <button type="button" class="btn btn-primary" id="login_button">Login</button>
         </div>

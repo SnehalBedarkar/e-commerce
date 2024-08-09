@@ -1,0 +1,13 @@
+/* Custom sticky header styling */
+header {
+    width: 100%;
+    z-index: 1000; /* Ensure it stays on top of other content */
+}
+
+.navbar {
+    background-color: #343a40; /* Ensure background color matches Bootstrap Dark */
+}
+
+#header_message {
+    margin-top: 60px; /* Adjust if needed to fit your layout */
+}

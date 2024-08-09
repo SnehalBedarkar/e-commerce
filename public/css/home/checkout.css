@@ -3,11 +3,15 @@ body{
 }
 
 .sticky-card {
-    position: -webkit-sticky; /* For Safari */
     position: sticky;
-    top: 0;
-    z-index: 1000; /* Adjust as needed to ensure it stays above other content */
-    background-color: white; /* Optional: Ensure the background is not transparent */
-    padding: 10px; /* Optional: Adjust padding as needed */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Optional: Add a slight shadow for visual separation */
+    top: 0; /* Adjust based on where you want the sticky effect to start */
+    background-color: #fff; /* Optional: background color to overlay on scroll */
+    z-index: 1000; /* Optional: to ensure it appears above other content */
+    padding: 10px; /* Optional: space inside the card */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: add shadow for visual depth */
+}
+
+.cart-item {
+    max-height: 500px; /* Adjust based on your needs */
+    overflow-y: auto;
 }
