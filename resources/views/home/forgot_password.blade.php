@@ -1,23 +1,23 @@
 @extends('layouts.master')
 
 @section('title', 'Forgot Password')
-{{-- 
+
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('css/custom-styles.css') }}">
-@endpush --}}
+    <link rel="stylesheet" href="{{ asset('css/home/forgot_password.css') }}">
+@endpush
 
 @section('header')
     @include('partials.home.header')
 @endsection
 
 @section('content') 
-    <div class="container mt-5 mb-5 h-70vh ">
-        <div class="row d-flex align-items-center justify-content-center h-75 w-100">
-            <div class="col-6">
+    <div class="container mt-5 mb-5 ">
+        <div class="row">
+            <div class="col-4">
                 <!-- Replace 'path/to/your/image.jpg' with the actual path to your image -->
                 {{-- <img src="{{ asset('storage/forgot_password_image.jpg') }}" alt="Description of the image" class="img-fluid"> --}}
             </div>
-            <div class="col-6">
+            <div class="col-8">
                 <div class="card">
                     <div class="card-header">
                         <h4>Forgot Password</h4>
@@ -27,12 +27,28 @@
                             <p>Enter Your Email</p>
                             <div class="row">
                                 <div class="col-6">
-                                    <input type="email" class="form-control" name="email" id="email" placeholder="email">
-                                    <button type="submit" id="send_otp" class="btn btn-primary mt-1">Send OTP</button>
+                                    <div>
+                                        <input type="email" class="form-control" name="email" id="email" placeholder="email">
+                                        <span id="email_error"></span>
+                                    </div>
+                                    <button type="submit" id="send_otp" class="btn btn-primary mt-2">Send OTP</button>
                                 </div>
                                 <div class="col-6 ">
-                                    <input type="string" id="otp" class="form-control" name="otp" placeholder="OTP">
-                                    <button type="submit" id="submit_otp" class="btn btn-primary mt-1 " >Submit</button>
+                                    <div>
+                                        <input type="string" id="otp" class="form-control mb-2" name="otp" placeholder="OTP">
+                                        <span id="otp_error"></span>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="time-display">
+                                                <span id="minutes" class="time-part">00</span>:
+                                                <span id="seconds" class="time-part">00</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <button type="submit" id="submit_otp" class="btn btn-primary mt-2 border">Submit</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </form>

@@ -41,7 +41,7 @@ class AuthController extends Controller
             'password' => $data['login_password']
         ];
 
-        $remember = $data['remember_me'];
+        $remember = $data['remember_me'] ?? false;
         
 
 
@@ -134,7 +134,8 @@ class AuthController extends Controller
         return view('home.forgot_password');
     }
 
-    public function forgotPassword(Request $request){
+    public function forgotPassword(Request $request)
+    {
 
         $data = $request->all();
 
@@ -156,11 +157,13 @@ class AuthController extends Controller
         $otp = mt_rand(100000, 999999);
 
         $user = User::where('email',$email)->first();
+
         $user->otp = $otp;
-        $user->otp_expires_at = now()->addMinutes(10);
+        $user->otp_expires_at = now()->addMinutes(1);
         $user->save();
 
         $otp = $user->otp;
+
         Mail::to($email)->send(new OtPMail($otp));
 
         return response()->json([
@@ -175,7 +178,7 @@ class AuthController extends Controller
         $data = $request->all();
     
         $rules = [
-            'otp' => 'required|digits:6',  // Ensures OTP is exactly 6 digits
+            'otp' => 'required|digits:6',
         ];
     
         $validator = Validator::make($data, $rules);
@@ -185,47 +188,83 @@ class AuthController extends Controller
                 'success' => false,
                 'message' => 'OTP is not valid',
                 'errors' => $validator->errors(),
-            ], 422);  // Return validation errors with a 422 status code
+            ], 422);  // 
         }
     
         $otp = $data['otp'];
     
-        // Attempt to find the user with the given OTP
         $user = User::where('otp', $otp)->first();
     
         if (!$user) {
             return response()->json([
                 'success' => false,
-                'message' => 'Invalid OTP or user not found',
-            ], 404);  // Return a 404 status if no user found
+                'message' => 'Invalid OTP',
+            ], 404);  
         }
     
-        // Optionally, you might want to check if the OTP is expired here
-        // Example:
         if ($user->otp_expires_at < now()) {
             return response()->json([
                 'success' => false,
                 'message' => 'OTP has expired',
-            ], 403);  // Return a 403 Forbidden status
-        }
+            ], 403);  
     
-        // OTP is valid, proceed with your logic (e.g., marking user as verified)
+        }
+
         $user->otp = null;  // Optionally clear the OTP
         $user->save();
 
-        $redirectUrl = url('/auth/register_new_password');
+        $redirectUrl = url('/auth/register-new-password-form');
 
         return response()->json([
             'success' => true,
             'message' => 'OTP verified successfully',
             'user' => $user,
             'redirectUrl' => $redirectUrl
-        ], 200);  // Return success response with user data
+        ], 200);  // Return success response with user data  
     }
 
-    public function passwordReset()
-    {
+    public function passwordResetForm(){
         return view('home.password_reset');
     }
+
+    public function resetPassword(Request $request){
+        $data = $request->all();
+
+        $rules = [
+            'password' => 'required|string|min:8|confirmed',
+            'email' => 'required|email|exists:users,email',
+        ];
+
+        $validator = Validator::make($data,$rules);
+
+        if($validator->fails()){
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()->first(), 
+            ]);
+        }
+
+        $password = $data['password'];
+        $email = $data['email'];
+
+        $user = User::where('email',$email)->first();
+
+        if($user){
+            $user->password = bcrypt($password);
+            $user->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Password Reset Successfully',
+            ]);
+        }else{
+            return response()->json([
+                'success' => false,
+                'message' => 'user not found'
+            ]);
+        }
+    }
+
     
+
 }

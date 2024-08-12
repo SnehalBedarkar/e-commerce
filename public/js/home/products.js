@@ -116,6 +116,11 @@ $(document).ready(function(){
     $('.add-to-cart').on('click', function() {
         let productId = $(this).data('id');
         let userId = $(this).data('user-id');
+        console.log(userId);
+
+        if(userId === ''){
+            $('#loginModal').modal('show');
+        }
         let quantity = 1; // This should be dynamic if you're using a quantity input
     
         $.ajax({

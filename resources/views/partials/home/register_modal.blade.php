@@ -7,28 +7,27 @@
         </div>
         <div class="modal-body">
             <form id="register_form">
+              <div class="mb-3">
+                  <label for="name" class="form-label">Name</label>
+                  <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}">
+                  <div id="register_name_error" class="text-danger register_error"></div>
+              </div>
 
-                <div class="mb-3">
-                    <label for="name" class="form-label">Name</label>
-                    <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}">
-                    <div id="register_name_error" class="text-danger register_error"></div>
-                </div>
+              <div class="mb-3">
+                  <label for="register_email" class="form-label">Email</label>
+                  <input type="email" class="form-control" id="register_email"  name="email" value="{{ old('register_email') }}" autocomplete="username">
+                  <div id="register_email_error" class="text-danger register_error"></div>
+              </div>
 
-                <div class="mb-3">
-                    <label for="register_email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="register_email"  name="email" value="{{ old('register_email') }}" autocomplete="username">
-                    <div id="register_email_error" class="text-danger register_error"></div>
-                </div>
-
-                <div class="mb-3">
-                  <label for="register_password" class="form-label">Password</label>
+              <div class="mb-3">
+                <label for="register_password" class="form-label">Password</label>
                   <div class="input-group">
-                      <input type="password" class="form-control" id="register_password" name="password" autocomplete="new-password" required>
+                    <input type="password" class="form-control" id="register_password" name="password" autocomplete="new-password" required>
                       <span class="input-group-text" id="togglePassword">
                         <i class="fa fa-eye" aria-hidden="true"></i>
                       </span>
                   </div>
-                  <div id="register_password_error" class="text-danger register_error"></div>
+                <div id="register_password_error" class="text-danger register_error"></div>
               </div>
 
               <div class="mb-3">

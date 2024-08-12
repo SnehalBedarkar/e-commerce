@@ -17,9 +17,9 @@
                     <input type="password" class="form-control" id="login_password" name="login_password" autocomplete="current-password" required>
                     <div id="login_password_error" class="text-danger"></div>
                 </div>
-                <div class="form-group mt-2">
-                  <input type="checkbox" id="remember_me" name="remember_me">
-                  <label for="remember_me" class="form-lable">Remember Me</label>
+                <div class="mt-2 mb-2 form-check">
+                  <input type="checkbox" id="remember_me" name="remember_me" class="form-check-input">
+                  <label for="remember_me" class="form-check-label">Remember Me</label>
                 </div>
             </form>
         </div>

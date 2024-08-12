@@ -67,8 +67,9 @@ $(document).ready(function(){
             data:formData,
             success:function(response){
                 if(response.success){
-                    $('#register_modal').modal('hide');
+                    $('#registerModal').modal('hide');
                     $('#login_modal').modal('show');
+                    $('#register_form')[0].reset();
                 }else{
                     let errors = response.errors;
                     errors.forEach((error)=>{

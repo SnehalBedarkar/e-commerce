@@ -56,7 +56,7 @@ class ProductController extends Controller
                 'price' => 'required|numeric|min:0',
                 'description' => 'nullable|string|max:255',
                 'stock_quantity' => 'required|integer|min:0',
-                'category_id' => 'required',
+                'category_id' => 'required|integer',
                 'image' => 'nullable|image|max:2048',
             ];
 
@@ -93,7 +93,8 @@ class ProductController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Product added successfully!',
-                'data' => $product // Optionally, you can return the saved product data
+                'data' => $product, // Optionally, you can return the saved product data
+                'imagePath' => $path
             ], 200);
         } catch (\Exception $e) {
             // Log the exception
@@ -205,33 +206,84 @@ class ProductController extends Controller
     }
 
 
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
-        try {
-            // Find the product by ID or throw a ModelNotFoundException
-            $product = Product::findOrFail($id);
+        // Validate the request
+        $request->validate([
+            'product_id' => 'required|integer|exists:products,id',
+        ]);
 
-            // Delete the associated image file if it exists
+        // Retrieve the product ID from the request
+        $productId = $request->input('product_id');
+
+        // Find the product by its ID
+        $product = Product::find($productId);
+
+        if ($product) {
+            // Construct the path to the image
             $imagePath = public_path('storage/' . $product->image);
+
+            // Check if the image exists and delete it
             if (file_exists($imagePath)) {
-                @unlink($imagePath); // Attempt to delete the file, ignoring errors
+                @unlink($imagePath);
             }
 
-            // Delete the product from the database
+            // Delete the product
             $product->delete();
 
-            // Return JSON response for AJAX requests
-            return response()->json(['success' => true, 'message' => 'Product deleted successfully.']);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            // Handle the case where product with $id is not found
-            return response()->json(['success' => false, 'message' => 'Product not found.'], 404);
-        } catch (\Exception $e) {
-            // Handle other exceptions or errors
-            return response()->json(['success' => false, 'message' => 'Error deleting product.'], 500);
+            return response()->json([
+                'success' => true,
+                'message' => 'Product deleted successfully.'
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Product not found.'
+            ]);
         }
     }
 
-    public function buyNow(){
-        
-    }
+   public function multipleDelete(Request $request)
+   {
+        $data = $request->all();
+
+        $rules = [
+            'ids' => 'required|array',
+            'ids.*' => 'required|integer|exists:products,id',
+        ];
+        $ids =  $data['ids'];
+
+        $validator = Validator::make($data,$rules);
+
+        if($validator->fails()){
+            return response()->json([
+                'success' => false,
+                'message' => 'user ids are not valid'
+            ]);
+        }
+
+        $products = Product::whereIn('id',$ids)->get();
+        if(!$products){
+            return response()->json([
+                'success' => false,
+                'message' => "no products founds",
+            ]);
+        }
+
+        foreach($products as $product){
+            $imagePath = public_path('storage/'.$product->image);
+            if(file_exists($imagePath)){
+                @unlink($imagePath);
+            }
+            $product->delete();
+        }
+
+        $remainingProductCount = Product::count();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'products deleted successfully',
+            'remaining_products' => $remainingProductCount
+        ]);
+   }
 }

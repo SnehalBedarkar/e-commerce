@@ -6,8 +6,6 @@ $(document).ready(function(){
         }
     });
 
-        // Initialize DataTable and store the instance
-    // var table = $('#users_table').DataTable();
 
     var userId;
     let row
@@ -15,11 +13,11 @@ $(document).ready(function(){
     $('#users_table').on('click','.remove-btn', function() {
         userId = $(this).data('user-id');
         row = $(this).closest('tr');
-        $('#deleteModal').modal('show');
+        $('#userDeleteModal').modal('show');
     });
     
         // Handle the delete confirmation
-    $('#confirmDelete').on('click', function() {
+    $('#confirmUserDelete').on('click', function() {
         if (userId) {
             $.ajax({
                 url: '/user/delete',
@@ -29,8 +27,7 @@ $(document).ready(function(){
                 },
                 success: function(response) {
                     if (response.success) {
-                        $('#deleteModal').modal('hide');
-                        // Remove the row using DataTables API
+                        $('#userDeleteModal').modal('hide');
                         row.remove()
                     }
                 }

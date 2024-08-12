@@ -16,35 +16,18 @@
 @endsection
 
 @section('content')
-    <section class="hero">
-        <div class="hero-content">
-            <h1>Welcome to Claywork</h1>
-            <p>Your one-stop shop for unique and handcrafted clay products.</p>
-            <a href="/shop" class="btn-primary">Shop Now</a>
-        </div>
-    </section>
-
-    <!-- Featured Products -->
-    <section class="featured-products">
-        <div class="container">
-            <h2>Featured Products</h2>
-            <div class="product-grid">
-                <div class="product-card">
-                    {{-- <img src="{{ asset('storage/'.$product->image) }}" alt="Product 1"> --}}
-                    <h3>Product 1</h3>
-                    <p>$25.00</p>
-                    <a href="/product/1" class="btn-secondary">View Details</a>
-                </div>
-                <div class="product-card">
-                    <img src="path/to/image2.jpg" alt="Product 2">
-                    <h3>Product 2</h3>
-                    <p>$30.00</p>
-                    <a href="/product/2" class="btn-secondary">View Details</a>
-                </div>
-                <!-- Add more product cards as needed -->
+    <div class="container">
+        <div class="row justify-content-center" style="height: 100vh;">
+            <div class="col-12 text-center">
+                <h3>Welcome To the ClayWork</h3>
             </div>
         </div>
-    </section>
+        <div class="row">
+            <div class="col-12">
+
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('footer')

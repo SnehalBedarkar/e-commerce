@@ -10,8 +10,8 @@ use Illuminate\Support\Facades\Log;
 class HomeController extends Controller
 {
     public function index()
-    {
-       return view('home.index');
+    {   
+        return view('home.index');
     }
 
     public function indexCategoryWise($id)

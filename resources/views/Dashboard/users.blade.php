@@ -22,7 +22,7 @@
         <div class="row">
             <div class="col-md-6 mb-3">
                 <label for="searchQuery" class="form-label">Search</label>
-                <input type="search" id="searchQuery" class="form-control" placeholder="Search users...">
+                <input type="search" id="searchQuery" class="form-control" placeholder="Search users">
             </div>
             <div class="col-md-6 mb-3">
                 <div class="row">
@@ -103,7 +103,7 @@
                                 <td>{{ $user->role }}</td>
                                 <td>{{ $user->phone_number }}</td>
                                 <td>
-                                   <button type="button" class="btn btn-sm btn-danger remove-btn" data-bs-target="#deleteModal" data-bs-toggle="modal" data-user-id="{{ $user->id }}">Delete</button>
+                                   <button type="button" class="btn btn-sm btn-danger remove-btn" data-bs-target="#userDeleteModal" data-bs-toggle="modal" data-user-id="{{ $user->id }}">Delete</button>
                                 </td>
                             </tr>
                         @empty
@@ -111,7 +111,7 @@
                                 <td colspan="8">No users found.</td>
                             </tr>
                         @endforelse
-                        <button type="button" id="#multipleDeleteBtn" data-bs-target="#multipleDeleteModal" data-bs-toggle="modal" class="btn btn-danger btn-sm mb-2">Delete</button>
+                        <button type="button" id="#multipleDeleteBtn" data-bs-target="#multipleUsersDeleteModal" data-bs-toggle="modal" class="btn btn-danger btn-sm mb-2">Delete</button>
                     </tbody>
                 </table>
             </div>

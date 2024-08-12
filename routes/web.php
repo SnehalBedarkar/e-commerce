@@ -22,17 +22,18 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/products/list',[HomeController::class, 'productList'])->name('products.list');
 
 
+
+
 // Authorisation Routes
 
 Route::any('/auth/login', [AuthController::class, 'login'])->name('auth.login');
 Route::post('/auth/register', [AuthController::class, 'register'])->name('auth.register');
 Route::post('/auth/logout', [AuthController::class, 'logout'])->name('auth.logout');
-Route::get('/auth/forgot/password/form',[AuthController::class, 'showForgotPassword'])->name('auth.forgot.password.form');
-Route::post('/auth/forgot/password',[AuthController::class, 'forgotPassword'])->name('auth.forgot.password');
-Route::post('/auth/verify/otp',[AuthController::class, 'verifyOtp'])->name('auth.verify.otp');
-Route::get('/auth/register_new_password',[AuthController::class, 'passwordReset'])->name('auth.register.new.password');
-
-
+Route::get('/auth/forgot-password-form',[AuthController::class, 'showForgotPassword'])->name('auth.forgot.password.form');
+Route::post('/auth/forgot-password',[AuthController::class, 'forgotPassword'])->name('auth.forgot.password');
+Route::post('/auth/verify-otp',[AuthController::class, 'verifyOtp'])->name('auth.verify.otp');
+Route::get('/auth/register-new-password-form',[AuthController::class, 'passwordResetForm'])->name('auth.register.password.form');
+Route::post('/auth/register-new-password',[AuthController::class, 'resetPassword'])->name('auth.reset.password');
 
 
 
@@ -49,8 +50,9 @@ Route::post('/product/store', [ProductController::class, 'store'])->name('produc
 Route::get('/product/show/{id}', [ProductController::class, 'show'])->name('products.show');
 Route::get('/product/edit/{id}', [ProductController::class, 'edit'])->name('products.edit');
 Route::put('/product/update/{id}', [ProductController::class, 'update'])->name('products.update');
-Route::delete('/product/destroy/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
+Route::delete('/product/destroy', [ProductController::class, 'destroy'])->name('products.destroy');
 Route::get('/products/search', [ProductController::class, 'search'])->name('products.search');
+Route::delete('/prouducts/multiple-delete',[ProductController::class, 'multipleDelete'])->name('products.multiple.delete');
 Route::get('/categories/{id}/products', [ProductController::class, 'productsByCategory'])->name('products.by.category');
 
 // Category Routes 
@@ -72,7 +74,7 @@ Route::get('/users/multiple-delete',[UserController::class, 'multipleDelete'])->
 Route::get('/active/users', [UserController::class, 'activeUsers'])->name('users.active');
 
 // Admin Routes
-Route::get('/adminPage', [AdminController::class, 'adminPage'])->name('admin.dashboard');
+Route::get('/adminPage', [AdminController::class, 'adminPage'])->name('admin.dashboard')->middleware('auth');
 Route::get('/active/users',[AdminController::class, 'activeUsers'])->name('active.users');
 Route::get('/users',[AdminController::class, 'usersList'])->name('admin.users.list');
 
