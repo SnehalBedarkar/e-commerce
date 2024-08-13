@@ -57,7 +57,7 @@
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="tbody">
                 @forelse ($products as $product)
                     <tr data-id="{{ $product->id }}">
                         <td><input type="checkbox" class="select-checkbox" data-id="{{ $product->id }}"></td>
@@ -68,13 +68,13 @@
                         <td>Rs{{ number_format($product->price, 2) }}</td>
                         <td>
                             <!-- Example action buttons, e.g., edit and delete -->
-                            <button type="button" class="btn btn-primary btn-sm" data-bs-target="#viewModal" data-bs-toggle="modal">View</button>
-                            <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#EditModal">Edit</button>
-                            <button type="button" class="btn btn-danger btn-sm remove-btn" data-bs-toggle="modal" data-id="{{ $product->id }}" data-bs-target="#productDeleteModal"> Delete</button>
+                            <button type="button" class="btn btn-primary btn-sm view-btn" data-bs-target="#viewProductModal" data-bs-toggle="modal">View</button>
+                            <button type="button" class="btn btn-secondary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editProductModal">Edit</button>
+                            <button type="button" class="btn btn-danger btn-sm remove-btn" data-bs-toggle="modal"  data-bs-target="#productDeleteModal"> Delete</button>
                         </td>
                     </tr>
                 @empty
-                    <tr>
+                    <tr id="tbl_msg">
                         <td colspan="6">No products found.</td>
                     </tr>
                 @endforelse

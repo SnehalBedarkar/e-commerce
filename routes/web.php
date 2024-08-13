@@ -47,13 +47,14 @@ Route::get('/cart/placeOrder',[CartController::class, 'placeOrder'])->name('cart
 Route::get('/products/index', [ProductController::class, 'index'])->name('products.index');
 Route::get('/product/create', [ProductController::class, 'create'])->name('products.create');
 Route::post('/product/store', [ProductController::class, 'store'])->name('products.store');
-Route::get('/product/show/{id}', [ProductController::class, 'show'])->name('products.show');
+Route::get('/product/show', [ProductController::class, 'show'])->name('products.show');
 Route::get('/product/edit/{id}', [ProductController::class, 'edit'])->name('products.edit');
 Route::put('/product/update/{id}', [ProductController::class, 'update'])->name('products.update');
 Route::delete('/product/destroy', [ProductController::class, 'destroy'])->name('products.destroy');
 Route::get('/products/search', [ProductController::class, 'search'])->name('products.search');
 Route::delete('/prouducts/multiple-delete',[ProductController::class, 'multipleDelete'])->name('products.multiple.delete');
 Route::get('/categories/{id}/products', [ProductController::class, 'productsByCategory'])->name('products.by.category');
+Route::get('/products/search',[ProductController::class, 'search'])->name('products.search');
 
 // Category Routes 
 Route::get('/categories/index/', [CategoryController::class, 'index'])->name('categories.index');

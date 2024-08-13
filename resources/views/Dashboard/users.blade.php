@@ -48,46 +48,34 @@
                         <tr>
                             <th><input type="checkbox" id="select_all"> Check</th>
                             <th>
-                                <div class="button-container">
-                                    <span>ID</span>
-                                    <button  id="upward_id">^</button>
-                                    <button  id="downward_id">v</button>
-                                </div>
+                                ID
+                                <i class="fas fa-arrow-up" id="sort-asc" style="cursor: pointer;"></i>
+                                <i class="fas fa-arrow-down" id="sort-desc" style="cursor: pointer;"></i>
                             </th>
                             <th>
-                                <div class="button-container">
-                                    <span>Name</span>
-                                    <button  id="upword_name">^</button>
-                                    <button id="downward_name">v</button>
-                                </div>
+                                Name
+                                <i class="fas fa-arrow-up" id="sort-asc" style="cursor: pointer;"></i>
+                                <i class="fas fa-arrow-down" id="sort-desc" style="cursor: pointer;"></i>
                             </th>
                             <th>
-                                <div class="button-container">
-                                    <span>Status</span>
-                                    <button id="upword">^</button>
-                                    <button id="downward">v</button>
-                                </div>
+                                Status
+                                <i class="fas fa-arrow-up" id="sort-asc" style="cursor: pointer;"></i>
+                                <i class="fas fa-arrow-down" id="sort-desc" style="cursor: pointer;"></i>
                             </th>
                             <th>
-                                <div class="button-container">
-                                    <span>Email</span>
-                                    <button id="upword">^</button>
-                                    <button id="downward">v</button>
-                                </div>
+                                Email
+                                <i class="fas fa-arrow-up" id="sort-asc" style="cursor: pointer;"></i>
+                                <i class="fas fa-arrow-down" id="sort-desc" style="cursor: pointer;"></i>
                             </th>
                             <th>
-                                <div class="button-container">
-                                    <span>Role</span>
-                                    <button id="upword">^</button>
-                                    <button id="downward">v</button>
-                                </div>
+                                Role
+                                <i class="fas fa-arrow-up" id="sort-asc" style="cursor: pointer;"></i>
+                                <i class="fas fa-arrow-down" id="sort-desc" style="cursor: pointer;"></i>
                             </th>
                             <th>
-                                <div class="button-container">
-                                    <span>Phone Number</span>
-                                    <button id="upword">^</button>
-                                    <button id="downward">v</button>
-                                </div>
+                                Phone Number
+                                <i class="fas fa-arrow-up" id="sort-asc" style="cursor: pointer;"></i>
+                                <i class="fas fa-arrow-down" id="sort-desc" style="cursor: pointer;"></i>
                             </th>
                             <th>Actions</th>
                         </tr>
