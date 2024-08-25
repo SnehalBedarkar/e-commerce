@@ -1,13 +1,94 @@
-/* Custom sticky header styling */
-header {
-    width: 100%;
-    z-index: 1000; /* Ensure it stays on top of other content */
+.container {
+    margin-top: 20px;
+}
+/* Card Container */
+.card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease-in-out;
 }
 
-.navbar {
-    background-color: #343a40; /* Ensure background color matches Bootstrap Dark */
+/* Card Hover Effect */
+.card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
-#header_message {
-    margin-top: 60px; /* Adjust if needed to fit your layout */
+/* Card Header */
+.card-header {
+    background-color: #007bff;
+    color: #fff;
+    padding: 15px;
+    border-bottom: 1px solid #0056b3;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.card-header h4 {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+/* Card Body */
+.card-body {
+    padding: 20px;
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+.card-body div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Active User Count */
+#activeUserCount {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #007bff;
+    margin: 0;
+}
+
+/* Refresh Button */
+#refresh_button {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: #fff;
+    transition: background-color 0.3s ease;
+}
+
+#refresh_button:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+}
+
+#refresh_button .fas {
+    margin-right: 5px;
+}
+
+/* Margin and Padding Adjustments */
+.mt-5 {
+    margin-top: 3rem;
+}
+
+
+h4 {
+    font-size: 1.25rem;
+    margin-bottom: 20px;
+}
+
+canvas {
+    max-width: 100%;
+    height: auto;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
 }

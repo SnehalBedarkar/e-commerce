@@ -26,18 +26,19 @@
                 </div>
                 <div class="card mt-4">
                     <div class="card-header">
-                        <div class="card-body">
-                            <button class="btn btn-secondary">My Orders</button>
-                            <hr>
-                            <h5>Account Setting</h5>
-                            <p>Profile Information</p>
-                            <p>Manage Addresses</p>
-                            <button class="btn btn-danger">Logout</button>
+                        <button class="btn btn-secondary">My Orders</button>
+                    </div>
+                    <div class="card-body">
+                        <h5>Account Setting</h5>
+                        <a class="btn btn-outline-primary mb-2">Profile Information</a>
+                        <a id="adderess_manage" class="btn btn-outline-primary mb-2">Manage Addresses</a>
+                        <div>
+                            <button class="btn btn-danger ">Logout</button>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-9">
+            <div class="col-md-9" id="main-content">
                 <div class="card">
                     <div class="card-header">
                         <h5>Profile Information</h5>

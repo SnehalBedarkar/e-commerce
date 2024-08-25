@@ -41,3 +41,54 @@ th {
     border-bottom: 2px solid #ccc;
 }
 
+.pagination {
+    display: flex;
+    justify-content: center; /* Center pagination horizontally */
+    margin: 2px 0; /* Space around the pagination */
+}
+
+.pagination .page-item {
+    margin: 0 5px; /* Space between pagination items */
+}
+
+.pagination .page-link {
+    display: inline-block;
+    padding: 10px 15px; /* Padding inside pagination links */
+    border: 1px solid #ddd; /* Border around pagination links */
+    border-radius: 5px; /* Rounded corners */
+    color: #007bff; /* Text color */
+    background-color: #fff; /* Background color */
+    text-decoration: none; /* Remove underline from links */
+}
+
+.pagination .page-link:hover {
+    background-color: #f8f9fa; /* Background color on hover */
+    border-color: #007bff; /* Border color on hover */
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #007bff; /* Active page background color */
+    border-color: #007bff; /* Active page border color */
+    color: #fff; /* Active page text color */
+    cursor: default; /* Disable cursor change */
+}
+
+.pagination .page-link svg {
+    width: 2px; /* Adjust width of SVG icons */
+    height: 2px; /* Adjust height of SVG icons */
+}
+
+.pagination .page-link:focus {
+    outline: none; /* Remove default focus outline */
+    box-shadow: 0 0 0 2px rgba(0,123,255,.25); /* Add custom focus outline */
+}
+
+@media (max-width: 768px) {
+    .pagination {
+        flex-direction: column; /* Stack pagination items vertically on small screens */
+    }
+
+    .pagination .page-item {
+        margin: 5px 0; /* Adjust spacing for vertical layout */
+    }
+}

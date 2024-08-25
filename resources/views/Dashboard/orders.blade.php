@@ -32,21 +32,21 @@
                         @foreach ($orders as $order)
                             @foreach ($order->products as $index => $product)
                                 <tr data-id="{{ $order->id }}">
-                                    @if ($index == 0)
+                                    @if ($loop->iteration == 1)
                                         <td rowspan="{{ $order->products->count() }}">{{ $order->id }}</td>
                                         <td rowspan="{{ $order->products->count() }}">{{ $order->order_number }}</td>
                                     @endif
-                                    <td>{{ $product->name }}</td>
+                                    <td> {{ $loop->iteration }} - {{ $product->name }}</td>
                                     <td>{{ $product->pivot->quantity }}</td>
                                     <td>Rs {{ number_format($product->price, 2) }}</td>
-                                    @if ($index == 0)
+                                    @if ($loop->iteration == 1)
                                         <td rowspan="{{ $order->products->count() }}">{{ $order->status }}</td>
                                         <td rowspan="{{ $order->products->count() }}">Rs {{ number_format($order->total, 2) }}</td>
+                                        <td rowspan="{{ $order->products->count() }}">
+                                            <button class="btn btn-primary">view</button>
+                                            <button class="btn btn-secondary">Delete</button>
+                                        </td>
                                     @endif
-                                    <td>
-                                        <button class="btn btn-primary">view</button>
-                                        <button class="btn btn-secondary">Delete</button>
-                                    </td>
                                 </tr>
                             @endforeach
                         @endforeach

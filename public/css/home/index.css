@@ -1,66 +1,86 @@
-/* styles.css */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
+/* Customize category images */
+.category-img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 70%;
+    transition: transform 0.3s ease;
 }
 
-.container {
-    width: 80%;
-    margin: 0 auto;
+.category-img:hover {
+    transform: scale(1.1);
 }
 
-
-.btn-primary {
-    background-color: #007bff;
-    color: #fff;
-    padding: 10px 20px;
-    text-decoration: none;
-    border-radius: 5px;
-}
-
-.btn-secondary {
-    background-color: #6c757d;
-    color: #fff;
-    padding: 10px 20px;
-    text-decoration: none;
-    border-radius: 5px;
-}
-
-.hero {
-    background: url('path/to/hero-image.jpg') no-repeat center center/cover;
-    color: #fff;
-    padding: 100px 0;
-    text-align: center;
-}
-
-.hero-content {
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-.featured-products {
-    padding: 50px 0;
-}
-
-.product-grid {
-    display: flex;
-    gap: 20px;
-}
-
-.product-card {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
+/* Product card styling */
+.card {
+    border: none;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
+    transition: box-shadow 0.3s ease;
+    border-radius: 8px; /* Adding rounded corners */
+    overflow: hidden; /* Ensures content fits within rounded corners */
+    width: 150px; /* Adjust card width */
+    height: 250px; /* Adjust card height */
+    margin: 10px; /* Add some margin for spacing */
+    text-align: center; /* Center text */
 }
 
-.product-card img {
-    max-width: 100%;
-    border-radius: 8px;
+.card img {
+    width: 100%;
+    height: 150px; /* Adjust image height */
+    object-fit: cover;
+    border-bottom: 1px solid #ddd; /* Add a border between image and text */
 }
 
+.card-body {
+    padding: 10px; /* Add padding inside the card */
+}
 
+.card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
 
+/* Search input field */
+#searchQuery {
+    border-radius: 20px;
+    padding: 10px 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
 
+/* Centering content */
+.text-center {
+    margin-top: 20px;
+    color: #555;
+}
+
+/* Category and product lists */
+.list-unstyled {
+    padding-left: 0;
+}
+
+.nav-link {
+    color: #333;
+    text-decoration: none;
+}
+
+.nav-link:hover {
+    color: #007bff;
+}
+
+/* Welcome text */
+h3 {
+    font-size: 2.5rem;
+    color: #6c757d;
+    margin-bottom: 40px;
+}
+
+/* Section Titles */
+h5 {
+    font-size: 1.5rem;
+    color: #495057;
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+#home_container{
+    background-color:rgb(255, 202, 153)
+}

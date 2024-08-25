@@ -10,12 +10,11 @@
     @include('partials.home.header')
 @endsection
 
-@section('content') 
-    <div class="container mt-5 mb-5 ">
+@section('content')
+    <div class="content-container">
         <div class="row">
             <div class="col-4">
-                <!-- Replace 'path/to/your/image.jpg' with the actual path to your image -->
-                {{-- <img src="{{ asset('storage/forgot_password_image.jpg') }}" alt="Description of the image" class="img-fluid"> --}}
+                <img src="{{ asset('images/forgot_password_image.jpg') }}" alt="Description" class="">
             </div>
             <div class="col-8">
                 <div class="card">
@@ -28,14 +27,14 @@
                             <div class="row">
                                 <div class="col-6">
                                     <div>
-                                        <input type="email" class="form-control" name="email" id="email" placeholder="email">
+                                        <input type="email" class="form-control" name="email" id="email" placeholder="Email">
                                         <span id="email_error"></span>
                                     </div>
                                     <button type="submit" id="send_otp" class="btn btn-primary mt-2">Send OTP</button>
                                 </div>
-                                <div class="col-6 ">
+                                <div class="col-6">
                                     <div>
-                                        <input type="string" id="otp" class="form-control mb-2" name="otp" placeholder="OTP">
+                                        <input type="text" id="otp" class="form-control mb-2" name="otp" placeholder="OTP">
                                         <span id="otp_error"></span>
                                     </div>
                                     <div class="row">

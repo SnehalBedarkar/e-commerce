@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\Address;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Models\CartItem;
@@ -14,30 +15,41 @@ class CheckoutController extends Controller
 {
     public function showCheckout()
     {
-        $userId = Auth::id();
-    
-        // Retrieve cart items for the authenticated user with product details
-        $cartItems = CartItem::where('user_id', $userId)->with('product')->get();
-    
+        if (Auth::check()) {
+            $userId = Auth::id();
+            $cartItems = CartItem::where('user_id', $userId)->with('product')->get();
+        } else {
+            $cartItems = session()->get('cart', []);
+            $cartItems = collect($cartItems)->map(function ($item) {
+                $product = Product::find($item['product_id']);
+                return (object)[
+                    'product' => $product,
+                    'quantity' => $item['quantity'],
+                ];
+            });
+        }
+
         $subtotal = 0;
-        $itemCount = 0;
-    
+        $itemsCount = 0;
+
         // Calculate subtotal and item count
         foreach ($cartItems as $item) {
             $productPrice = $item->product->price; // Assuming 'price' is a column in the 'products' table
             $quantity = $item->quantity;
             $subtotal += $productPrice * $quantity;
+            $itemsCount += $quantity; // Accumulate total item count
         }
 
-        $deliveryCharges = 50;
+        $deliveryCharges = 50; // Delivery charges are constant in this example
+        $total = $subtotal + $deliveryCharges;
 
-        $total = $deliveryCharges + $subtotal;
+        $addressCount = Address::count();
+        $addresses = Address::all();
 
-        $itemsCount = $cartItems->count();
-    
-        // Pass cart items, subtotal, and item count to the view
-        return view('home.checkout', compact('cartItems', 'subtotal', 'itemsCount' , 'deliveryCharges' , 'total'));
+        // Pass cart items, subtotal, item count, and addresses to the view
+        return view('home.checkout', compact('cartItems', 'subtotal', 'itemsCount', 'deliveryCharges', 'total', 'addressCount', 'addresses'));
     }
+
 
     public function checkoutUpdate(Request $request)
     {
@@ -99,6 +111,12 @@ class CheckoutController extends Controller
         });
 
         $deliveryCharges = 50;
+
+        if($subtotal === 0){
+            $deliveryCharges == 0;
+        }
+
+        
 
         $total = $subtotal + $deliveryCharges;
 

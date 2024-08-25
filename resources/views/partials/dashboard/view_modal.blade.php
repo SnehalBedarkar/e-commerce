@@ -30,7 +30,7 @@
                 <input type="text" class="form-control mb-2" id="product_stock_quantity" name="stock_quantity" readonly>
               </div>
             </div>
-            <div class="form-group  mb-2">
+            {{-- <div class="form-group  mb-2">
               <label for="category_id" class="form-lable">Category</label>
               <div class="input-group">
                   <select name="category_id" id="product_category_id" class="form-control  mb-2" disabled>
@@ -39,7 +39,7 @@
                       @endforeach
                   </select>
               </div>
-            </div>
+            </div> --}}
             <div class="form-group  mb-2">
               <label for="image" class="form-label">Image</label>
               <img id="product_image" src="" alt="Product Image" class="img-fluid mb-3" width="30px">

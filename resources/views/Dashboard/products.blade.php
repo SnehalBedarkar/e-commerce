@@ -61,11 +61,11 @@
                 @forelse ($products as $product)
                     <tr data-id="{{ $product->id }}">
                         <td><input type="checkbox" class="select-checkbox" data-id="{{ $product->id }}"></td>
-                        <td>{{ $product->id }}</td>
-                        <td>{{ $product->name }}</td>
-                        <td><img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" width="30px"></td>
-                        <td>{{ $product->description }}</td>
-                        <td>Rs{{ number_format($product->price, 2) }}</td>
+                        <td class="product_id">{{ $product->id }}</td>
+                        <td class="product_name">{{ $product->name }}</td>
+                        <td class="product_image"><img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" width="30px"></td>
+                        <td class="product_description">{{ $product->description }}</td>
+                        <td class="product_price">Rs {{ number_format($product->price, 2) }}</td>
                         <td>
                             <!-- Example action buttons, e.g., edit and delete -->
                             <button type="button" class="btn btn-primary btn-sm view-btn" data-bs-target="#viewProductModal" data-bs-toggle="modal">View</button>

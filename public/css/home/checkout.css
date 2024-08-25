@@ -15,3 +15,7 @@ body{
     max-height: 500px; /* Adjust based on your needs */
     overflow-y: auto;
 }
+
+#name{
+    padding:inherit;
+}

@@ -59,7 +59,7 @@ $(document).ready(function(){
 
         // clear the previous errors
         $('.text-danger').text('');
-        
+
         $.ajax({
             url:'/auth/register',
             type:'POST',
@@ -112,61 +112,131 @@ $(document).ready(function(){
         });
     });
 
-
-    $('.add-to-cart').on('click', function() {
-        let productId = $(this).data('id');
-        let userId = $(this).data('user-id');
-        console.log(userId);
-
-        if(userId === ''){
-            $('#loginModal').modal('show');
-        }
-        let quantity = 1; // This should be dynamic if you're using a quantity input
-    
+    $('.card').on('click',function(){
+        let product_id = $(this).data('id');
         $.ajax({
-            url: '/cart/add',
-            type: 'POST',
-            data: {
-                'product_id': productId,
-                'user_id': userId,
-                'quantity': quantity
-            },
-            success: function(response) {
-                if (response.success) {
-                    window.location.href = response.redirect_url;
-                } else if (response.authenticated === false) {
-                    $('#loginModal').modal('show');
-                } else {
-                    // Handle other types of errors or responses here
-                    console.log(response.errors);
-                }
-            },
-            error: function(xhr, status, error) {
-                // Handle errors here, such as logging them or showing a user-friendly message
-                console.error('AJAX error:', status, error);
-                alert('An error occurred while processing your request. Please try again.');
-            }
-        });
-    }); 
-
-    $('.buy-now').on('click',function(){
-        let productId = $(this).data('id');
-        let userId = $(this).data('user-id');
-        let quantity = 1; // This should be dynamic if you're using a quantity input
-    
-        $.ajax({
-            url:'/cart/add',
+            url:'/product/views',
             type:'POST',
-            data: {
-                'product_id': productId,
-                'user_id': userId,
-                'quantity': quantity
-            },
+            data:{'product_id':product_id},
             success:function(response){
-                if(response.success){
-                    window.location.href = '/checkout';
+                if(response.success === true){
+                    //
                 }
             }
         })
     });
+
+
+
+   // Function to handle sorting
+    $('.btn').on('click', function() {
+        var categoryId = $(this).data('id');
+        var sortType = $(this).data('action');
+
+        $.ajax({
+            url: '/products/sort',
+            method: 'GET',
+            data: {
+                category_id: categoryId,
+                sort: sortType,
+            },
+            success: function(response) {
+                console.log(response);
+                $('#product_list').empty();
+
+                let products = response.products;
+                products.forEach((product) => {
+                    let card = `
+                        <div class="col-10 mb-4 ms-auto">
+                            <a href="/product/details/${product.id}" class="text-decoration-none">
+                                <div class="card shadow-sm border-0" data-id="${product.id}">
+                                    <div class="row g-0">
+                                        <div class="col-2 d-flex align-items-center position-relative card-img-container">
+                                            <img src="/storage/${product.image}" class="img-fluid rounded-start mb-2 mt-2" alt="${product.name}" style="width: 100px; height: auto;">
+                                            <span class="wishlist-icon position-absolute top-0 end-0 p-2">
+                                                <i class="fas fa-heart"></i>
+                                            </span>
+                                        </div>
+                                        <div class="col-6 mt-2">
+                                            <h5 class="card-title mb-0">${product.name}</h5>
+                                        </div>
+                                        <div class="col-2 mt-2">
+                                            <p class="card-text mb-0"><strong>Price: Rs ${product.price}</strong></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    `;
+                    $('#product_list').append(card);
+                });
+            },
+            error: function(xhr) {
+                console.error('Error:', xhr.responseText); // Handle errors
+            }
+        });
+    });
+
+    $("#product_list").on('click', '.wishlist-button', function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        let button = $(this);
+        let productId = button.data('id');
+        let icon = button.find('.wishlist-icon');
+        let isInWishlist = icon.hasClass('text-danger');
+
+        $.ajax({
+            url: isInWishlist ? '/wishlist/remove' : '/wishlist/add',
+            method: 'POST',
+            data: {
+                'product_id': productId,
+            },
+            success: function(response) {
+                let modalBody;
+
+                if (response.success === true) {
+                    // Toggle the heart icon's color
+                    if (isInWishlist) {
+                        icon.removeClass('text-danger');
+                    } else {
+                        icon.addClass('text-danger');
+                    }
+
+                    // Success message
+                    modalBody = `
+                        <div class="alert alert-success" role="alert">
+                            <strong>Success!</strong> ${response.message}
+                        </div>
+                    `;
+                } else {
+                    // Info or warning message
+                    modalBody = `
+                        <div class="alert alert-info" role="alert">
+                            <strong>Info!</strong> ${response.message}
+                        </div>
+                    `;
+                }
+
+                // Insert content into modal body and show the modal
+                $('#wishlistModal .modal-body').html(modalBody);
+                $('#wishlistModal').modal('show');
+            },
+            error: function(xhr) {
+                // Error message
+                let modalBody = `
+                    <div class="alert alert-danger" role="alert">
+                        <strong>Error!</strong> Failed to update the wishlist. Please try again.
+                    </div>
+                `;
+
+                // Insert content into modal body and show the modal
+                $('#wishlistModal .modal-body').html(modalBody);
+                $('#wishlistModal').modal('show');
+            }
+        });
+    });
+
+
+
 })

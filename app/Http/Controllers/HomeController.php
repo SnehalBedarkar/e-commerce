@@ -10,8 +10,12 @@ use Illuminate\Support\Facades\Log;
 class HomeController extends Controller
 {
     public function index()
-    {   
-        return view('home.index');
+    {
+        $categories = Category::with(['products' => function($query) {
+            $query->orderBy('views', 'desc')->take(4); // Adjust as needed
+        }])->get();
+
+        return view('home.index', compact('categories'));
     }
 
     public function indexCategoryWise($id)
@@ -46,4 +50,6 @@ class HomeController extends Controller
         $products = Product::all();
         return view('home.products',compact('products'));
     }
+
+
 }

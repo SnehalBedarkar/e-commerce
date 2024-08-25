@@ -20,7 +20,7 @@
         <div id="main_content" class="col-12">
             @foreach ($orders as $order)
                 @foreach ($order->products as $index => $product)
-                    <div class="card mb-3">
+                    <div class="card mb-3 mt-2">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-2">

@@ -44,7 +44,7 @@
             </div>
 
             <div class="mt-5">
-                <a href="#" class="btn btn-primary">Return to Home</a>
+                <a href="{{ route('home') }}" class="btn btn-primary">Return to Home</a>
                 <a href="#" class="btn btn-secondary">View Order Details</a>
             </div>
         </div>

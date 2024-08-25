@@ -31,4 +31,9 @@ class Order extends Model
                     ->withPivot('quantity')
                     ->withTimestamps();
     }
+
+    public function address()
+    {
+        return $this->belongsTo(Address::class);
+    }
 }

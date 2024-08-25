@@ -67,35 +67,45 @@ $(document).ready(function(){
                 'user_id': userId,
                 'product_id': productId,
                 'item_id': itemId,
-                'action': action,
+                'action': action
             },
             success: function(response) {
-                let itemTotal = response.cartItem ? response.cartItem.total : 0;
-                let subtotal = response.subtotal;
-                let total = response.total;
-               
-                $('#item-total-').text(itemTotal);
-                $('#item-total-'+itemId).text(response.itemTotalPrice);
+                console.log(response);
 
-                // Update the subtotal and total values
-               
+                // Ensure response properties exist before accessing them
+                let itemTotal = response.cartItem ? response.cartItem.total : 0;
+                let subtotal = response.subtotal || 0;
+                let total = response.total || 0;
+                let quantity = response.cartItem ? response.cartItem.quantity : 0;
+                let itemCount = response.cartItems ? response.cartItems.length : 0;
+
+                // Update item total for specific item
+                $(`#item-total-${itemId}`).text(response.itemTotalPrice || itemTotal);
+
+                // Update subtotal and total
                 $('#subtotal-value').text(subtotal);
                 $('#total-value').text(total);
 
-
-                let quantity = response.cartItem.quantity;
+                // Update quantity input
                 quantityInput.val(quantity);
-                if (quantity === 0) {
-                    $card.remove(); // Use the $card selector to remove the item
+
+                // Remove item if quantity is less than 1
+                if (quantity < 1) {
+                    $card.remove();
                 }
 
-
-                let itemCount = response.cartItems ? response.cartItems.length : 0;
+                // Update item count
                 $('#item_count').text(itemCount);
-                if(itemCount === 0){
+
+                // Display empty cart message if no items left
+                if (itemCount === 0) {
                     displayEmptyCartMessage();
                 }
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX request failed:', status, error);
             }
         });
     });
+
 });

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'price', 'description', 'stock_quantity', 'sku', 'category_id', 'image'];
+    protected $fillable = ['name', 'sku', 'price', 'description', 'stock_quantity', 'sku', 'category_id', 'image'];
 
     public function Category()
     {
@@ -25,5 +25,9 @@ class Product extends Model
         return $this->belongsToMany(Order::class, 'order_product')
                     ->withPivot('quantity')
                     ->withTimestamps();
+    }
+
+    public function Wishlist(){
+        return $this->belongsTo(Wishlist::class);
     }
 }

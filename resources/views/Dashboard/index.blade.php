@@ -29,7 +29,7 @@
                 <canvas id="usersChart"></canvas>
             </div>
             <div class="row">
-                <div class="col-3">
+                <div class="col-12 col-md-4">
                     <div class="card mt-5">
                         <div class="card-header">
                             <h4>Active Users</h4>
@@ -37,7 +37,7 @@
                         <div class="card-body">
                             <div>
                                 <p id="activeUserCount">{{ $activeUsersCount }}</p>
-                                <button id="refresh_button" class="btn btn-primary ">
+                                <button id="refresh_button" class="btn btn-primary">
                                     <i class="fas fa-sync-alt"></i> Refresh
                                 </button>
                             </div>
@@ -62,5 +62,5 @@
 @endpush
 
 <script>
-    
+
 </script>

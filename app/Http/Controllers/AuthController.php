@@ -8,17 +8,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
+use App\Models\CartItem;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+
+
 
 class AuthController extends Controller
 {
 
     public function login(Request $request)
     {
-        $data = $request->only('login_email', 'login_password' , 'remember_me');
+        $data = $request->only('login_email', 'login_password', 'remember_me');
         
-
         $rules = [
             'login_email' => 'required|exists:users,email',
             'login_password' => 'required|min:8'
@@ -34,19 +36,35 @@ class AuthController extends Controller
             ]);
         }
 
-        // extract the credential 
-
+        // Extract the credentials
         $credentials = [
             'email' => $data['login_email'],
             'password' => $data['login_password']
         ];
 
         $remember = $data['remember_me'] ?? false;
-        
 
-
-        if (Auth::attempt($credentials ,$remember)) {
+        if (Auth::attempt($credentials, $remember)) {
             $user = Auth::user();
+
+            // Store session cart items in the database
+            $cart = session()->get('cart', []);
+            foreach ($cart as $item) {
+                // Insert or update cart item in the database
+                CartItem::updateOrCreate(
+                    [
+                        'user_id' => $user->id,
+                        'product_id' => $item['product_id']
+                    ],
+                    [
+                        'quantity' => $item['quantity']
+                    ]
+                );
+            }
+
+            // Optionally clear the session cart
+            session()->forget('cart');
+
             $remember_token = $user->remember_token;
             $redirectUrl = $user->role === 'admin' ? '/adminPage' : '/';
             return response()->json([
@@ -62,10 +80,6 @@ class AuthController extends Controller
         ]);
     }
 
-    public function showRegistrationForm()
-    {
-        return view('Auth.register_form');
-    }
 
     public function register(Request $request)
     { 

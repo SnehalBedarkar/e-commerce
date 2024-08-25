@@ -18,6 +18,7 @@ class OrderController extends Controller
    public function index(){
       $orders = Order::all();
       return view('dashboard.orders',compact('orders'));
+      // return $orders;
    }
 
 
@@ -64,65 +65,70 @@ class OrderController extends Controller
    {
       $data = $request->all();
 
-      $paymentId = $data['payment_id'];
-      $userId = Auth::id();
-
+      // Define validation rules
       $rules = [
          'payment_id' => 'required|string',
+         'address_id' => 'required|integer',
       ];
 
-      $validator = Validator::make($data,$rules);
-
-
-      if($validator->fails()){
+      // Validate request data
+      $validator = Validator::make($data, $rules);
+      if ($validator->fails()) {
          return response()->json([
-            'success' => false,
-            'message' => 'user_id is not valid',
+               'success' => false,
+               'message' => 'Validation failed',
+               'errors' => $validator->errors()
          ]);
       }
 
-      // find cartItems by userId
+      // Retrieve necessary data
+      $paymentId = $data['payment_id'];
+      $userId = Auth::id();
+      $addressId = $data['address_id'];
 
-      $cartItems = CartItem::where('user_id', $userId)->get();
-      if($cartItems){
-         foreach ($cartItems as $item) {
-            $productId = $item->product->id;
-         }
+      // Retrieve cart items for the user
+      $cartItems = CartItem::where('user_id', $userId)->with('product')->get();
+      if ($cartItems->isEmpty()) {
+         return response()->json([
+               'success' => false,
+               'message' => 'No items found in cart'
+         ]);
       }
 
-
-      
-      $totalPrice = $cartItems->sum(function($item) {
-         $product = Product::find($item->product_id); // Assuming you have a Product model and it's related by product_id
-         return $item->quantity * ($product ? $product->price : 0); // Ensure price is valid
+      // Calculate total price of cart items
+      $totalPrice = $cartItems->sum(function ($item) {
+         return $item->quantity * $item->product->price; // Using relationship to get product price
       });
 
-
-      // create new Order 
-
+      // Create new Order
       $order = new Order();
       $order->user_id = $userId;
       $order->order_number = 'ORD-' . strtoupper(uniqid()); 
       $order->total = $totalPrice;
       $order->razorpay_payment_id = $paymentId;
+      $order->address_id = $addressId;
       $order->status = 'pending';
       $order->save();
 
-      foreach ($cartItems as $item) {  
+      // Attach products to the order
+      foreach ($cartItems as $item) {
          $order->products()->attach($item->product_id, ['quantity' => $item->quantity]);
       }
 
+      // Clear the cart
       CartItem::where('user_id', $userId)->delete();
-  
-      session()->flash('order_id',$order->id);
 
+      // Set session flash data
+      session()->flash('order_id', $order->id);
 
+      // Return success response
       return response()->json([
          'success' => true,
-         'message' => 'order created successfully',
-         'redirect_url' => '/order/placed', 
+         'message' => 'Order created successfully',
+         'redirect_url' => '/order/placed',
       ]);
-   }  
+   }
+
 
 
    

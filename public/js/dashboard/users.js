@@ -15,7 +15,7 @@ $(document).ready(function(){
         row = $(this).closest('tr');
         $('#userDeleteModal').modal('show');
     });
-    
+
         // Handle the delete confirmation
     $('#confirmUserDelete').on('click', function() {
         if (userId) {
@@ -93,13 +93,13 @@ $(document).ready(function(){
     let query = '';
     let startDate = '';
     let endDate = '';
-   
+
     $('#searchQuery').on('input', function() {
         query = $(this).val();
         search();
     })
 
-    
+
     $('#search_button').on('click',function(){
         startDate = $('#start_date').val();
         console.log(startDate);
@@ -121,8 +121,9 @@ $(document).ready(function(){
                 console.log('Response:', response);
                 let tbody = $('#users_table tbody');
                 tbody.empty(); // Clear existing rows
-                
-                if (response.success) {
+
+                if (response.success === true) {
+                    console.log(response);
                     let users = response.users;
                     if (Array.isArray(users) && users.length === 0) {
                         tbody.append('<tr><td colspan="8">No users found.</td></tr>');
@@ -154,10 +155,57 @@ $(document).ready(function(){
                 console.error('AJAX Error:', status, error);
                 let tbody = $('#users_table tbody');
                 tbody.empty(); // Clear existing rows
-                tbody.append('<tr><td colspan="8">Error loading data.</td></tr>');   
+                tbody.append('<tr><td colspan="8">Error loading data.</td></tr>');
             }
         });
     }
-    
-    
+
+
+    $('#users_table').on('click', '.sort', function() {
+        let action = $(this).data('action');
+        let column = $(this).data('column');
+
+        $.ajax({
+            url: '/users/sorting',
+            type: 'GET',
+            data: {
+                'action': action,
+                'column': column
+            },
+            success: function(response) {
+                if (response.success === true) {
+                    let users = response.users;
+                    let rows = '';
+
+                    users.forEach((user) => {
+                        rows += `
+                            <tr data-id="${user.id}">
+                                <td><input type="checkbox" class="select-checkbox" data-id="${user.id}"></td>
+                                <td>${user.id}</td>
+                                <td>${user.name}</td>
+                                <td>${user.is_active}</td>
+                                <td>${user.email}</td>
+                                <td>${user.role}</td>
+                                <td>${user.phone_number}</td>
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-danger remove-btn" data-bs-target="#userDeleteModal" data-bs-toggle="modal" data-user-id="${user.id}">Delete</button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+
+                    // Update the table body with new rows
+                    $('#users_table tbody').html(rows);
+
+                } else {
+                    console.error('Sorting failed:', response.message);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX error:', status, error);
+            }
+        });
+    });
+
+
 })

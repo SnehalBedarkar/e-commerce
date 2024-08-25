@@ -8,6 +8,7 @@ $(document).ready(function(){
     $('#add_product').on('click', function(e) {
         e.preventDefault();
         let formData = new FormData($('#createProductForm')[0]);
+
         $.ajax({
             url:'/product/store',
             type:'POST',
@@ -26,9 +27,9 @@ $(document).ready(function(){
                             <td>${data.name}</td>
                             <td><img src="${response.image_url}" alt="${data.name}" width="30px"></td>
                             <td>${data.description}</td>
-                            <td>Rs${data.price}</td>
+                            <td>${data.price}</td>
                             <td>
-                                <button type="button" class="btn btn-primary btn-sm view-btn" data-bs-target="#viewModal" data-bs-toggle="modal">View</button>
+                                <button type="button" class="btn btn-primary btn-sm view-btn" data-bs-target="#viewProductModal" data-bs-toggle="modal">View</button>
                                 <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#editProductModal">Edit</button>
                                 <button type="button" class="btn btn-danger btn-sm remove-btn" data-bs-toggle="modal"  data-bs-target="#productDeleteModal"> Delete</button>
                             </td>
@@ -136,11 +137,11 @@ $(document).ready(function(){
                     $('#products_table tbody').empty();
                     products.forEach((product)=>{
                         let row =  `<tr data-id="${product.id}">
-                                        <td>${product.id}</td>
-                                        <td>${product.name}</td>
-                                        <td><img src="/storage/${product.image}" width="30px"></td>
-                                        <td>${product.description}</td>
-                                        <td>${product.price}</td>
+                                        <td class="product_id">${product.id}</td>
+                                        <td class="product_name">${product.name}</td>
+                                        <td class="product_image"><img src="/storage/${product.image}" width="30px"></td>
+                                        <td class="product_description">${product.description}</td>
+                                        <td class="product_price">Rs ${product.price}</td>
                                         <td>
                                             <button type="button" class="btn btn-primary btn-sm view-btn" data-bs-target="#viewProductModal" data-bs-toggle="modal">View</button>
                                             <button type="button" class="btn btn-secondary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editProductModal">Edit</button>
@@ -178,8 +179,83 @@ $(document).ready(function(){
         })
     })
 
+    $('#edit_image').on('change', function(event) {
+        var fileInput = $(this)[0];
+        var file = fileInput.files[0];
+        var imagePreview = $('#new_image_preview');
+
+        if (file) {
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                // Update the preview image src and display it
+                imagePreview.attr('src', e.target.result);
+                imagePreview.show();
+            };
+
+            // Read the file as a data URL
+            reader.readAsDataURL(file);
+        } else {
+            // Hide the preview if no file is selected
+            imagePreview.hide();
+        }
+    });
+
     $("tbody").on('click','.edit-btn',function(){
         let productId = $(this).closest('tr').data('id');
-        console.log(productId);
+    
+        $.ajax({
+            url:'/product/edit',
+            type:'GET',
+            data:{
+                'product_id':productId
+            },
+            success:function(response){
+                if(response.success === true){
+                    let product = response.product[0];
+                    $("#edit_product_id").val(product.id);
+                    $('#edit_product_name').val(product.name);
+                    $('#edit_price').val(product.price);
+                    $('#edit_product_description').val(product.description);
+                    $('#edit_stock_quantity').val(product.stock_quantity)
+                    $('#edit_category_id').val(product.category_id);
+                    $('#current_image').attr('src','/storage/'+ product.image);
+                    $('#current_image').attr('alt',product.name);
+                }
+            }
+        })
     })
+
+    $('#save_changes').on('click', function() {
+        let formData = new FormData($('#editProductForm')[0]);
+        $.ajax({
+            url:'/product/update', // Ensure this URL is correct
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                if (response.success === true) {
+                    console.log(response);
+                    let product = response.product;
+                    console.log(product);
+                    $('#editProductModal').modal('hide');
+                    let row = $(`#products_table tr[data-id="${product.id}"]`);
+                    row.find('td.product_id').text(product.id);
+                    row.find('td.product_name').text(product.name);
+                    row.find('td.product_image img').attr('src', `/storage/${product.image}`);
+                    row.find('td.product_description').text(product.description);
+                    row.find('td.product_price').text(`Rs${product.price}`);
+                }else{
+                    if(response.success === false){
+                        // 
+                    }
+                }
+            },
+            error: function() {
+                alert('An error occurred while updating the product.');
+            }
+        });
+    });
+
 });

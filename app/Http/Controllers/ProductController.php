@@ -17,7 +17,7 @@ class ProductController extends Controller
     {
         $products = Product::all();
         $categories = Category::all();
-        return view('Dashboard.products',compact('products','categories')); 
+        return view('Dashboard.products',compact('products','categories'));
     }
 
     public function productsByCategory(int $id)
@@ -103,16 +103,15 @@ class ProductController extends Controller
 
         $validator = Validator::make($data,$rules);
 
-        if($validator){
+        if($validator->fails()){
             return response()->json([
                 'success' => false,
-                'product' => $product,
             ]);
         }
 
         $product_id = $data['product_id'];
 
-        $product = Product::where('id',$product_id);
+        $product = Product::where('id',$product_id)->get();
 
         if($product){
             return response()->json([
@@ -123,20 +122,23 @@ class ProductController extends Controller
 
     }
 
-    public function update(string $id, Request $request)
+    public function update(Request $request)
     {
-        // Validation rules
+        // Retrieve all the data from the request
+        $data = $request->all();
+
+        // Define validation rules
         $rules = [
             'name' => 'required|max:255',
             'price' => 'required|numeric',
             'description' => 'nullable|string',
             'stock_quantity' => 'required|numeric',
             'category_id' => 'required|integer',
-            'image' => 'image|max:2048'
+            'image' => 'nullable|image|max:2048' // image is optional
         ];
 
         // Validate the request
-        $validator = Validator::make($request->all(), $rules);
+        $validator = Validator::make($data, $rules);
 
         // Check for validation errors
         if ($validator->fails()) {
@@ -146,47 +148,53 @@ class ProductController extends Controller
             ], 400); // Bad Request status code
         }
 
-        try {
-            // Find the product or throw an exception if not found
-            $product = Product::findOrFail($id);
+        // Find the product by ID
+        $product_id = $data['id'];
+        $product = Product::find($product_id);
 
-            // Update product attributes
-            $product->name = $request->name;
-            $product->price = $request->price;
-            $product->description = $request->description;
-            $product->stock_quantity = $request->stock_quantity;
-            $product->category_id = $request->category_id;
-            // Handle image upload if a new image is provided
-            if ($request->hasFile('image')) {
-                // Delete the old image if it exists
-                $imagePath = public_path('storage/' . $product->image);
-                if (file_exists($imagePath)) {
-                    @unlink($imagePath);
-                }
-
-                // Store the new image
-                $image = $request->file('image');
-                $path = $image->store('images', 'public');
-                $product->image = $path;
-            }
-
-            // Save the product changes
-            $product->save();
-
-            // Return success response with updated product data
-            return response()->json([
-                'success' => true,
-                'product' => $product
-            ]);
-        } catch (\Exception $e) {
-            // Return error response if an exception occurs
+        if (!$product) {
             return response()->json([
                 'status' => false,
-                'message' => 'Error updating product: ' . $e->getMessage()
-            ], 500); // Internal Server Error status code
+                'message' => 'Product not found'
+            ], 404); // Not Found status code
         }
-    }
 
+        // Update product attributes
+        $product->name = $data['name'];
+        $product->price = $data['price'];
+        $product->description = $data['description'];
+        $product->stock_quantity = $data['stock_quantity'];
+        $product->category_id = $data['category_id'];
+
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            // Store the new image
+            $image = $request->file('image');
+            $path = $image->store('images', 'public');
+            $imageUrl = Storage::url($path);
+
+            // Delete the old image if it exists and is different from the new one
+            if ($product->image && $product->image !== $path) {
+                // Extract the old image path from the stored path
+                $oldImagePath = 'public/images/' . basename($product->image);
+                if (Storage::exists($oldImagePath)) {
+                    Storage::delete($oldImagePath);
+                }
+            }
+
+            // Update the product with the new image path
+            $product->image = $path;
+        }
+
+        // Save the product or perform other actions
+        $product->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Product updated successfully',
+            'product' => $product
+        ], 200); // OK status code
+    }
 
     public function destroy(Request $request)
     {
@@ -278,7 +286,7 @@ class ProductController extends Controller
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date'
         ];
-        
+
         $validator = Validator::make($data, $rules);
 
         if ($validator->fails()) {
@@ -363,5 +371,87 @@ class ProductController extends Controller
             ]);
         }
     }
+
+
+    public function showProduct(Request $request, String $id)
+    {
+        $product = Product::findOrFail($id);
+        return view('home.product_details', compact('product'));
+    }
+
+
+    public function viewsOnProduct(Request $request)
+    {
+        $data = $request->all();
+        $rules = [
+            'product_id' => 'required|integer'
+        ];
+
+        $validator = Validator::make($data, $rules);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation failed',
+                'success' => false,
+                'errors' => $validator->errors()->all()
+            ]);
+        }
+
+        $productId = $data['product_id'];
+
+        // Check if the product exists
+        $product = Product::findOrFail($productId);
+
+        // Increment the views count
+        $product->views = $product->views + 1;
+        $product->save();
+
+        return response()->json([
+            'message' => 'Product views updated successfully',
+            'success' => true,
+            'views' => $product->views
+        ]);
+    }
+
+    public function sort(Request $request)
+    {
+        // Validate inputs
+        $request->validate([
+            'category_id' => 'required|integer|exists:categories,id',
+            'sort' => 'nullable|string|in:low_to_high,high_to_low,popularity,newest'
+        ]);
+
+        $categoryId = $request->input('category_id');
+        $sortType = $request->input('sort');
+
+        $query = Product::where('category_id', $categoryId);
+
+        switch ($sortType) {
+            case 'low_to_high':
+                $query->orderBy('price', 'asc');
+                break;
+            case 'high_to_low':
+                $query->orderBy('price', 'desc');
+                break;
+            case 'popularity':
+                $query->orderBy('popularity', 'desc'); // Assuming you have a 'popularity' column
+                break;
+            case 'newest':
+                $query->orderBy('created_at', 'desc');
+                break;
+            default:
+                // Optional: You could add a default sort, e.g., by name or relevance
+                $query->orderBy('name', 'asc');
+                break;
+        }
+
+        $products = $query->get();
+
+        return response()->json([
+            'success' => true,
+            'products' => $products,
+        ]);
+    }
+
 
 }

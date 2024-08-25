@@ -43,39 +43,39 @@
 
         <div class="row table-responsive">
             <div class="col-12">
-                <table class="table table-striped table-bordered table-hover table-dark table-sm" id="users_table">
-                    <thead class="thead-dark">
+                <table class="table table-striped table-bordered table-hover table-sm" id="users_table">
+                    <thead class="table-dark">
                         <tr>
                             <th><input type="checkbox" id="select_all"> Check</th>
                             <th>
                                 ID
-                                <i class="fas fa-arrow-up" id="sort-asc" style="cursor: pointer;"></i>
-                                <i class="fas fa-arrow-down" id="sort-desc" style="cursor: pointer;"></i>
+                                <i class="fas fa-arrow-up sort" data-column="id" data-action="asc" style="cursor: pointer;"></i>
+                                <i class="fas fa-arrow-down sort" data-column="id" data-action="desc" style="cursor: pointer;"></i>
                             </th>
                             <th>
                                 Name
-                                <i class="fas fa-arrow-up" id="sort-asc" style="cursor: pointer;"></i>
-                                <i class="fas fa-arrow-down" id="sort-desc" style="cursor: pointer;"></i>
+                                <i class="fas fa-arrow-up sort" data-column="name" data-action="asc" style="cursor: pointer;"></i>
+                                <i class="fas fa-arrow-down sort" data-column="name" data-action="desc" style="cursor: pointer;"></i>
                             </th>
                             <th>
                                 Status
-                                <i class="fas fa-arrow-up" id="sort-asc" style="cursor: pointer;"></i>
-                                <i class="fas fa-arrow-down" id="sort-desc" style="cursor: pointer;"></i>
+                                <i class="fas fa-arrow-up sort" data-column="status" data-action="asc" style="cursor: pointer;"></i>
+                                <i class="fas fa-arrow-down sort" data-column="status" data-action="desc" style="cursor: pointer;"></i>
                             </th>
                             <th>
                                 Email
-                                <i class="fas fa-arrow-up" id="sort-asc" style="cursor: pointer;"></i>
-                                <i class="fas fa-arrow-down" id="sort-desc" style="cursor: pointer;"></i>
+                                <i class="fas fa-arrow-up sort" data-column="email" data-action="asc" style="cursor: pointer;"></i>
+                                <i class="fas fa-arrow-down sort" data-column="email" data-action="desc" style="cursor: pointer;"></i>
                             </th>
                             <th>
                                 Role
-                                <i class="fas fa-arrow-up" id="sort-asc" style="cursor: pointer;"></i>
-                                <i class="fas fa-arrow-down" id="sort-desc" style="cursor: pointer;"></i>
+                                <i class="fas fa-arrow-up sort" data-column="role" data-action="asc" style="cursor: pointer;"></i>
+                                <i class="fas fa-arrow-down sort" data-column="role" data-action="desc" style="cursor: pointer;"></i>
                             </th>
                             <th>
                                 Phone Number
-                                <i class="fas fa-arrow-up" id="sort-asc" style="cursor: pointer;"></i>
-                                <i class="fas fa-arrow-down" id="sort-desc" style="cursor: pointer;"></i>
+                                <i class="fas fa-arrow-up sort" data-column="phone_number" data-action="asc" style="cursor: pointer;"></i>
+                                <i class="fas fa-arrow-down sort" data-column="phone_number" data-action="desc" style="cursor: pointer;"></i>
                             </th>
                             <th>Actions</th>
                         </tr>
@@ -102,6 +102,10 @@
                         <button type="button" id="#multipleDeleteBtn" data-bs-target="#multipleUsersDeleteModal" data-bs-toggle="modal" class="btn btn-danger btn-sm mb-2">Delete</button>
                     </tbody>
                 </table>
+                <!-- Pagination Links -->
+                <div class="pagination">
+                    {{ $users->links() }}
+                </div>
             </div>
         </div>
 @endsection
