@@ -27,8 +27,8 @@ class User extends Authenticatable
         'phone_number'
     ];
 
-   
-    
+
+
 
     /**
      * The attributes that should be hidden for serialization.
@@ -65,5 +65,25 @@ class User extends Authenticatable
 
     public function addresses(){
         return $this->hasMany(Address::class ,'user_id','id');
+    }
+
+    public function roles(){
+        return $this->belongsToMany(Role::class,'user_role');
+    }
+
+    public function hasRole($role)
+    {
+        return $this->roles->contains('name', $role);
+    }
+
+
+    public function hasPermission($permission)
+    {
+        foreach ($this->roles as $role) {
+            if ($role->permissions->contains('name', $permission)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

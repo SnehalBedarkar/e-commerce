@@ -34,7 +34,7 @@ $(document).ready(function(){
         });
     });
 
-    $('#buy_now').on('click',function(){
+    $('#buy-now').on('click',function(){
         let productId = $(this).data('id');
         let userId = $(this).data('user-id');
         let quantity = 1; // This should be dynamic if you're using a quantity input

@@ -19,7 +19,7 @@ $(document).ready(function(){
                 if (response.success === true) {
                     $('#createProductForm')[0].reset();
                     $('#createProductModal').modal('hide');
-                    let data = response.data; 
+                    let data = response.data;
                     let row = `
                         <tr data-id="${data.id}">
                             <td><input type="checkbox" class="select-checkbox" data-id="${data.id}"></td>
@@ -123,7 +123,7 @@ $(document).ready(function(){
 
     $('#searchQuery').on('input',function(){
         let query =  $(this).val();
-        
+
         $.ajax({
             url:'/products/search',
             type:'GET',
@@ -147,7 +147,7 @@ $(document).ready(function(){
                                             <button type="button" class="btn btn-secondary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#editProductModal">Edit</button>
                                             <button type="button" class="btn btn-danger btn-sm remove-btn" data-bs-toggle="modal"  data-bs-target="#productDeleteModal"> Delete</button>
                                         </td>
-                                    </tr>`   
+                                    </tr>`
                     $('#products_table tbody').append(row);
                     });
                 }
@@ -156,7 +156,7 @@ $(document).ready(function(){
     })
 
     $('#tbody').on('click','.view-btn' ,function(){
-     
+
         let productId = $(this).closest('tr').data('id')
         $.ajax({
             url:'/product/show',
@@ -203,7 +203,7 @@ $(document).ready(function(){
 
     $("tbody").on('click','.edit-btn',function(){
         let productId = $(this).closest('tr').data('id');
-    
+
         $.ajax({
             url:'/product/edit',
             type:'GET',
@@ -248,7 +248,7 @@ $(document).ready(function(){
                     row.find('td.product_price').text(`Rs${product.price}`);
                 }else{
                     if(response.success === false){
-                        // 
+                        //
                     }
                 }
             },
@@ -258,4 +258,75 @@ $(document).ready(function(){
         });
     });
 
+        // Function to render specifications based on the selected type
+        function renderSpecifications(type) {
+            var specificationsHtml = '';
+
+            if (type === 'mobile') {
+                specificationsHtml = `
+                    <div class="specification-item form-row mb-2">
+                        <div class="col">
+                            <input type="text" class="form-control" name="specifications[][key]" placeholder="Feature" required>
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control" name="specifications[][value]" placeholder="Value" required>
+                        </div>
+                        <button type="button" class="btn btn-danger btn-sm ml-2 removeSpecification">Remove</button>
+                    </div>
+                `;
+            } else if (type === 'laptop') {
+                specificationsHtml = `
+                    <div class="specification-item form-row mb-2">
+                        <div class="col">
+                            <input type="text" class="form-control" name="specifications[][key]" placeholder="Processor" required>
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control" name="specifications[][value]" placeholder="Details" required>
+                        </div>
+                        <button type="button" class="btn btn-danger btn-sm ml-2 removeSpecification">Remove</button>
+                    </div>
+                `;
+            } else if (type === 'tv') {
+                specificationsHtml = `
+                    <div class="specification-item form-row mb-2">
+                        <div class="col">
+                            <input type="text" class="form-control" name="specifications[][key]" placeholder="Resolution" required>
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control" name="specifications[][value]" placeholder="Details" required>
+                        </div>
+                        <button type="button" class="btn btn-danger btn-sm ml-2 removeSpecification">Remove</button>
+                    </div>
+                `;
+            }
+
+            $('#specificationsContainer').html(specificationsHtml);
+        }
+
+        // Update specifications fields based on the selected type
+        $('#type').change(function () {
+            var selectedType = $(this).val();
+            renderSpecifications(selectedType);
+        });
+
+        // Add new specification field
+        $('#addSpecification').click(function () {
+            var type = $('#type').val();
+            if (type) {
+                var specificationHtml = `
+                    <div class="specification-item form-row mb-2">
+                        <div class="col">
+                            <input type="text" class="form-control" name="specifications[][key]" placeholder="Key" required>
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control" name="specifications[][value]" placeholder="Value" required>
+                        </div>
+                        <button type="button" class="btn btn-danger btn-sm ml-2 removeSpecification">Remove</button>
+                    </div>
+                `;
+                $('#specificationsContainer').append(specificationHtml);
+            } else {
+                alert('Please select a product type first.');
+            }
+        });
 });

@@ -19,33 +19,32 @@
     <div class="row">
         <div id="main_content" class="col-12">
             @foreach ($orders as $order)
-                @foreach ($order->products as $index => $product)
-                    <div class="card mb-3 mt-2">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-2">
-                                    <img src="{{ asset('storage/'.$product->image) }}" alt="{{ $product->name }}" class="img-fluid">
-                                </div>
-                                <div class="col-4">
-                                    <h6 class="product-name">{{ $product->name }}</h6>
-                                </div>
-                                @if ($index === 0)
-                                    <div class="col-2">
-                                        <p class="card-text"><strong>Total:</strong> Rs {{ number_format($order->total, 2) }}</p>
-                                    </div>
-                                    <div class="col-4">
-                                        <p class="card-text"><strong>Status:</strong> {{ $order->status }}</p>
-                                    </div>
-                                @endif
+                <div class="card mb-3 mt-2 shadow-sm border-0 w-100">
+                    <div class="card-body p-3">
+                        <div class="row mb-2">
+                            <div class="col-6">
+                                <p class="card-text"><strong>Total:</strong> Rs {{ number_format($order->total, 2) }}</p>
+                            </div>
+                            <div class="col-6 text-end">
+                                <p class="card-text"><strong>Status:</strong> {{ $order->status }}</p>
                             </div>
                         </div>
+                        @foreach ($order->products as $product)
+                            <div class="row align-items-center mb-3">
+                                <div class="col-2">
+                                    <img src="{{ asset('storage/'.$product->image) }}" alt="{{ $product->name }}" class="img-fluid rounded" style="max-height: 80px;">
+                                </div>
+                                <div class="col-10">
+                                    <h6 class="product-name m-0">{{ $product->name }}</h6>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
-                @endforeach
+                </div>
             @endforeach
         </div>
     </div>
 </div>
-
 
 
 @endsection

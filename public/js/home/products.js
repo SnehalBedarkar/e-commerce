@@ -120,7 +120,7 @@ $(document).ready(function(){
             data:{'product_id':product_id},
             success:function(response){
                 if(response.success === true){
-                    //
+                    console.log(response);
                 }
             }
         })
@@ -147,21 +147,21 @@ $(document).ready(function(){
                 let products = response.products;
                 products.forEach((product) => {
                     let card = `
-                        <div class="col-10 mb-4 ms-auto">
+                        <div class="col-12 mb-4 ms-auto">
                             <a href="/product/details/${product.id}" class="text-decoration-none">
                                 <div class="card shadow-sm border-0" data-id="${product.id}">
-                                    <div class="row g-0">
-                                        <div class="col-2 d-flex align-items-center position-relative card-img-container">
-                                            <img src="/storage/${product.image}" class="img-fluid rounded-start mb-2 mt-2" alt="${product.name}" style="width: 100px; height: auto;">
-                                            <span class="wishlist-icon position-absolute top-0 end-0 p-2">
-                                                <i class="fas fa-heart"></i>
-                                            </span>
+                                    <div class="row justify-content-around">
+                                        <div class="col-2  align-self-center position-relative">
+                                            <img src="/storage/${product.image}" class="img-fluid rounded-start img-thumbnail mb-2 mt-2" alt="${product.name}" style="width: 100px; height: auto;">
+                                            <button class="btn btn-light position-absolute top-0 end-0 m-2 wishlist-button" data-id="${product.id}">
+                                                <i class="fas fa-heart wishlist-icon"></i> <!-- FontAwesome heart icon -->
+                                            </button>
                                         </div>
-                                        <div class="col-6 mt-2">
+                                        <div class="col-6 align-self-auto">
                                             <h5 class="card-title mb-0">${product.name}</h5>
                                         </div>
-                                        <div class="col-2 mt-2">
-                                            <p class="card-text mb-0"><strong>Price: Rs ${product.price}</strong></p>
+                                        <div class="col-2 align-self-auto">
+                                            <p class="card-text mb-0"><strong>Rs ${product.price}</strong></p>
                                         </div>
                                     </div>
                                 </div>

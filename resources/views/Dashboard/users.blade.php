@@ -15,10 +15,12 @@
 @endsection
 
 @section('content')
-    <div class="alert-container mt-4">
-        <h4>Users List</h4>
-
-        <!-- Search Filter -->
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-12 mt-1 text-center">
+                <h5>Users List</h5>
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-6 mb-3">
                 <label for="searchQuery" class="form-label">Search</label>
@@ -43,7 +45,7 @@
 
         <div class="row table-responsive">
             <div class="col-12">
-                <table class="table table-striped table-bordered table-hover table-sm" id="users_table">
+                <table class="table table-secondary table-striped table-bordered table-hover table-sm" id="users_table">
                     <thead class="table-dark">
                         <tr>
                             <th><input type="checkbox" id="select_all"> Check</th>
@@ -68,11 +70,6 @@
                                 <i class="fas fa-arrow-down sort" data-column="email" data-action="desc" style="cursor: pointer;"></i>
                             </th>
                             <th>
-                                Role
-                                <i class="fas fa-arrow-up sort" data-column="role" data-action="asc" style="cursor: pointer;"></i>
-                                <i class="fas fa-arrow-down sort" data-column="role" data-action="desc" style="cursor: pointer;"></i>
-                            </th>
-                            <th>
                                 Phone Number
                                 <i class="fas fa-arrow-up sort" data-column="phone_number" data-action="asc" style="cursor: pointer;"></i>
                                 <i class="fas fa-arrow-down sort" data-column="phone_number" data-action="desc" style="cursor: pointer;"></i>
@@ -86,12 +83,11 @@
                                 <td><input type="checkbox" class="select-checkbox" data-id="{{ $user->id }}"></td>
                                 <td>{{ $user->id }}</td>
                                 <td>{{ $user->name }}</td>
-                                <td>{{ $user->is_active }}</td>
+                                <td>{{ $user->status }}</td>
                                 <td>{{ $user->email }}</td>
-                                <td>{{ $user->role }}</td>
                                 <td>{{ $user->phone_number }}</td>
                                 <td>
-                                   <button type="button" class="btn btn-sm btn-danger remove-btn" data-bs-target="#userDeleteModal" data-bs-toggle="modal" data-user-id="{{ $user->id }}">Delete</button>
+                                    <button type="button" class="btn btn-sm btn-danger remove-btn" data-bs-target="#userDeleteModal" data-bs-toggle="modal" data-user-id="{{ $user->id }}">Delete</button>
                                 </td>
                             </tr>
                         @empty
@@ -99,15 +95,16 @@
                                 <td colspan="8">No users found.</td>
                             </tr>
                         @endforelse
-                        <button type="button" id="#multipleDeleteBtn" data-bs-target="#multipleUsersDeleteModal" data-bs-toggle="modal" class="btn btn-danger btn-sm mb-2">Delete</button>
                     </tbody>
                 </table>
                 <!-- Pagination Links -->
                 <div class="pagination">
-                    {{ $users->links() }}
+                    {{ $users->links('pagination::bootstrap-5') }}
                 </div>
             </div>
         </div>
+        <button type="button" id="#multipleDeleteBtn" data-bs-target="#multipleUsersDeleteModal" data-bs-toggle="modal" class="btn btn-danger btn-sm mb-2">Delete</button>
+    </div>
 @endsection
 
 @section('footer')
@@ -117,7 +114,6 @@
 @section('modals')
     @include('partials.dashboard.delete_modal')
 @endsection
-
 
 @push('scripts')
     <script src="{{ asset('js/dashboard/users.js') }}"></script>

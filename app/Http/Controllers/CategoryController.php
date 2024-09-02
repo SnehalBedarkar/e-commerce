@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Brand;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -14,8 +15,11 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::all();
-        return view('dashboard.categories',compact('categories'));
+        $brands = Brand::all();
+        return view('dashboard.categories',compact('categories','brands'));
     }
+
+
 
     public function store(Request $request)
     {
@@ -52,7 +56,7 @@ class CategoryController extends Controller
         }
 
         $category->save();
-        
+
         if($category){
             return response()->json([
                 'message' => 'Category added successfully',
@@ -108,17 +112,17 @@ class CategoryController extends Controller
         $validator = Validator::make($request->all(), [
             'category_id' => 'required|integer'
         ]);
-    
+
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
                 'message' => 'Category ID is not valid'
             ]);
         }
-    
+
         // Fetch the category using the validated ID
         $category = Category::find($request->category_id);
-    
+
         // Check if the category was found
         if (!$category) {
             return response()->json([
@@ -126,19 +130,24 @@ class CategoryController extends Controller
                 'message' => 'Category not found'
             ]);
         }
-    
+
         // Return the category data
         return response()->json([
             'success' => true,
             'category' => $category
         ]);
-    }   
-    
+    }
+
     public function categoryWiseProducts(string $id)
     {
+        // Fetch the category with its products
         $category = Category::with('products')->findOrFail($id);
         $products = $category->products;
-        return view('home.products', compact('category', 'products'));
+
+        // Fetch brands associated with the specified category
+        $brands = Brand::where('category_id', $id)->get();
+
+        return view('home.products', compact('category', 'products', 'brands'));
     }
 
 }

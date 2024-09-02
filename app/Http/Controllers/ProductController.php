@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Brand;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use function PHPUnit\Framework\fileExists;
@@ -17,7 +18,8 @@ class ProductController extends Controller
     {
         $products = Product::all();
         $categories = Category::all();
-        return view('Dashboard.products',compact('products','categories'));
+        $brands = Brand::all();
+        return view('Dashboard.products',compact('products','categories','brands'));
     }
 
     public function productsByCategory(int $id)
@@ -403,7 +405,7 @@ class ProductController extends Controller
         $product = Product::findOrFail($productId);
 
         // Increment the views count
-        $product->views = $product->views + 1;
+        $product->view_count = $product->views + 1;
         $product->save();
 
         return response()->json([
@@ -446,6 +448,7 @@ class ProductController extends Controller
         }
 
         $products = $query->get();
+
 
         return response()->json([
             'success' => true,

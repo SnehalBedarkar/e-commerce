@@ -12,15 +12,18 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\BrandController;
+use App\Http\Controllers\RoleController;
 use Illuminate\Http\Request;
 
 // Middleware
-use App\Http\Middleware\AuthAdmin;
-use App\Http\Middleware\AuthUser;
+use App\Http\Middleware\CheckRole;
 
 // Home Routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/products/list', [HomeController::class, 'productList'])->name('products.list');
+
+Route::get('/dashboard/login',[AuthController::class, 'loginPage'])->name('dashboard.login');
 
 // Authorisation Routes
 Route::any('/auth/login', [AuthController::class, 'login'])->name('auth.login');
@@ -64,7 +67,7 @@ Route::get('/category/show', [CategoryController::class, 'showCategory'])->name(
 Route::get('/category/{id}/products', [CategoryController::class, 'categoryWiseProducts'])->name('category.products');
 
 // User Routes
-Route::get('/users/index', [UserController::class, 'index'])->name('users.index')->middleware(AuthAdmin::class);
+Route::get('/users/index', [UserController::class, 'index'])->name('users.index');
 Route::get('/users/search', [UserController::class, 'usersSearch'])->name('users.search');
 Route::get('/users/chart', [UserController::class, 'chartData'])->name('users.chart');
 Route::get('/user/show/{id}', [UserController::class, 'show'])->name('user.show');
@@ -80,15 +83,16 @@ Route::put('/user/address-update', [UserController::class, 'addressUpdate'])->na
 Route::get('/users/sorting', [UserController::class, 'sort'])->name('users.sorting');
 
 // Admin Routes
-Route::get('/adminPage', [AdminController::class, 'adminPage'])->name('admin.dashboard')->middleware(AuthAdmin::class);
+Route::get('/adminPage', [AdminController::class, 'adminPage'])->name('admin.dashboard');
 Route::get('/active/users', [AdminController::class, 'activeUsers'])->name('active.users');
 Route::get('/users', [AdminController::class, 'usersList'])->name('admin.users.list');
+Route::get('/settings',[AdminController::class, 'settings'])->name('settings');
 
 // Order Routes
 Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
 Route::get('/orders/chart', [OrderController::class, 'chartData'])->name('orders.chart');
 Route::post('/order/add', [OrderController::class, 'addOrder'])->name('order.add');
-Route::get('/users/orders', [OrderController::class, 'userSpecificOrders'])->name('user.orders')->middleware('auth');
+Route::get('/users/orders', [OrderController::class, 'userSpecificOrders'])->name('user.orders');
 Route::get('/orders/status', [OrderController::class, 'ordersStatus'])->name('orders.status');
 Route::get('/order/placed', [OrderController::class, 'orderPlaced'])->name('order.placed');
 Route::delete('/order/delete', [OrderController::class, 'orderDestroy'])->name('order.destroy');
@@ -102,7 +106,14 @@ Route::get('/wishlist', [WishlistController::class, 'userSpecificWishlist'])->na
 Route::post('/wishlist/add', [WishlistController::class, 'addToWishlist'])->name('wishlist.add');
 Route::delete('/wishlist/remove', [WishlistController::class, 'removeFromWishlist'])->name('wishlist.remove');
 
-// Payment Routes
-Route::post('/payment', [PaymentController::class, 'payment'])->name('payment');
+
+Route::get('/brands',[BrandController::class, 'index'])->name('brands.index');
+Route::post('/brand-store',[BrandController::class, 'store'])->name('brand.store');
+Route::get('/brand-show',[BrandController::class, 'show'])->name('brand.show');
+
+
+Route::get('/roles',[RoleController::class, 'index'])->name('roles.index')->middleware('role:Super Admin');
+Route::post('/role-add',[RoleController::class, 'store'])->name('role.store');
+Route::get('/roles-assign-form',[RoleController::class, 'assignRoleForm'])->name('roles.assign.form')->middleware('role:Super Admin');
 
 

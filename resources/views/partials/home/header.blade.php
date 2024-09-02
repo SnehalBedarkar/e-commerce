@@ -24,6 +24,7 @@
                         <li class="nav-item">
                             <button type="button" class="btn btn-primary" id="logout_button" data-bs-target="#logoutModal" data-bs-toggle="modal">Logout</button>
                         </li>
+
                     @endguest
                 </ul>
             </div>

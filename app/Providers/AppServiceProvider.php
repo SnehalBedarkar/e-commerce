@@ -3,6 +3,9 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Domain\Orders\Events\OrderPlaced;
+use App\Domain\Orders\Listeners\SendOrderPlacedEmail;
+use Illuminate\Support\Facades\Event;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +22,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Event::listen(
+            OrderPlaced::class,
+            SendOrderPlacedEmail::class,
+        );
     }
 }

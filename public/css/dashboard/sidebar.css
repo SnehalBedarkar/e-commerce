@@ -33,3 +33,19 @@
 .nav-item.mb-2 {
     margin-bottom: 10px; /* Space between items */
 }
+
+.sidebar {
+    background-color: #f8f9fa; /* Light background color */
+}
+.nav-link {
+    padding: 0.75rem 1.25rem; /* Adjust padding */
+    border-radius: 0.25rem; /* Rounded corners */
+}
+.nav-link:hover {
+    background-color: #e9ecef; /* Highlight background on hover */
+    color: #495057; /* Change text color on hover */
+}
+.fa-lg {
+    font-size: 1.25em; /* Larger icons */
+}
+

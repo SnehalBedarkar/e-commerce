@@ -1,3 +1,26 @@
-#category_description{
-    width: 300px;
+/* categories.css */
+
+.description-column {
+    max-width: 200px; /* Adjust this value as needed */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
+
+.actions-column {
+    width: 200px; /* Adjust this value as needed to fit all action buttons */
+    text-align: center;
+}
+
+#category_id{
+    max-width: 10px;
+}
+
+.profile-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ddd; /* Optional: adds a border to the profile image */
+}
+

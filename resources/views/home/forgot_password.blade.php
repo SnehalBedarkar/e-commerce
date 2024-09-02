@@ -11,10 +11,10 @@
 @endsection
 
 @section('content')
-    <div class="content-container">
+    <div class="container">
         <div class="row">
             <div class="col-4">
-                <img src="{{ asset('images/forgot_password_image.jpg') }}" alt="Description" class="">
+                <img src="{{ asset('images/3293465.jpg') }}" alt="Description" class="img-fluid img-thumbnail">
             </div>
             <div class="col-8">
                 <div class="card">

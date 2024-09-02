@@ -16,7 +16,7 @@
 @endsection
 
 @section('content')
-    <div id="home_container">
+    <div class="container"">
         <h3 class="text-center">Welcome To the ClayWork</h3>
 
         <!-- Search Bar -->
@@ -44,35 +44,60 @@
             @endforeach
         </div>
 
-        <!-- Products Section -->
-        <h5>Our Some Most Visited Products</h5>
+        <!-- Carausel -->
+
         <div class="row">
-            @foreach ($categories as $category)
-                <div class="col-12 mb-4">
-                    <h6>{{ $category->name }}</h6>
-                    <div class="row">
-                        @foreach ($category->products as $product)
-                        <div class="col-3 mb-4">
-                            <a href="{{ route('category.products', $category->id) }}" class="text-decoration-none">
-                                <div class="card text-center" data-id="{{ $product->id }}">
-                                    @if($product->image && Storage::exists('public/' . $product->image))
-                                        <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="card-img-top">
-                                    @else
-                                        <img src="{{ asset('images/default-product.jpg') }}" alt="Default Image" class="card-img-top">
-                                    @endif
-                                    <div class="card-body">
-                                        <h6 class="card-title">{{ $product->name }}</h6>
-                                        <p class="card-text">Rs {{ $product->price }}</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
+            <div class="col-12">
+                <!-- Carousel Container -->
+                <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        @foreach ($electronicsProducts as $index => $product)
+                            <!-- Add 'active' class to the first item only -->
+                            <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
+                                <img src="{{ asset('storage/' . $product->image) }}" class="d-block w-100 " alt="Product Image" height="200px">
+                            </div>
                         @endforeach
                     </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleSlidesOnly" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleSlidesOnly" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
                 </div>
-            @endforeach
+            </div>
         </div>
 
+        <div class="row">
+            @foreach ($categories as $category)
+                @if ($category->name === 'Electronics')
+                    <div class="col-12 mb-4">
+                        <h6>Best of {{ $category->name }}</h6>
+                        <div class="row">
+                            @foreach ($category->products as $product)
+                                <div class="col-3 mb-4">
+                                    <a href="{{ route('category.products', $category->id) }}" class="text-decoration-none">
+                                        <div class="card  text-center" data-id="{{ $product->id }}">
+                                            @if($product->image && Storage::exists('public/' . $product->image))
+                                                <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="card-img-top img-thumbnail img-fluid">
+                                            @else
+                                                <img src="{{ asset('images/default-product.jpg') }}" alt="Default Image" class="card-img-top">
+                                            @endif
+                                            <div class="card-body">
+                                                <h6 class="card-title">{{ $product->name }}</h6>
+                                                <p class="card-text">Rs {{ $product->price }}</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+            @endforeach
+        </div>
     </div>
 @endsection
 

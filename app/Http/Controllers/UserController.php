@@ -7,13 +7,14 @@ use App\Models\Address;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
     public function index()
     {
         $perPage = 10;
-        $users = User::simplePaginate($perPage);
+        $users = User::Paginate($perPage);
         return view('dashboard.users', compact('users'));
     }
 
@@ -157,8 +158,6 @@ class UserController extends Controller
                 'errors' => $validator->errors()->all(),
             ]);
         }
-
-        // Add user_id to the validated data
 
         $userId = Auth::id();
 

@@ -30,4 +30,8 @@ class Product extends Model
     public function Wishlist(){
         return $this->belongsTo(Wishlist::class);
     }
+
+    public function brand(){
+        return $this->belongsTo(Brand::class);
+    }
 }

@@ -5,29 +5,20 @@ $(document).ready(function(){
         }
     });
 
-    
-  
-  
-    
-
 
     $('#send_otp').on('click',function(e){
         e.preventDefault()
-        
-       
-        // Set initial time (1 minute)
-        let seconds = 0;
-        let minutes = 1; // Set minutes to 1
 
-        // Update the time display immediately
+        let seconds = 0;
+        let minutes = 1;
+
         $('#seconds').text(seconds.toString().padStart(2, '0'));
         $('#minutes').text(minutes.toString().padStart(2, '0'));
 
-        // Create a function to handle the countdown
         const countdownInterval = setInterval(function() {
             if (minutes === 0 && seconds === 0) {
                 clearInterval(countdownInterval);
-                $('.time-display').html('<p class="expired-message">OTP has expired</p>');
+                $('.time-display').html('<p class="expired-message text-muted">OTP has expired</p>');
             } else {
                 if (seconds === 0) {
                     if (minutes > 0) {
@@ -37,12 +28,12 @@ $(document).ready(function(){
                 } else {
                     seconds -= 1;
                 }
-                
+
                 $('#seconds').text(seconds.toString().padStart(2, '0'));
                 $('#minutes').text(minutes.toString().padStart(2, '0'));
             }
         }, 1000);
-      
+
         let email = $('#email').val();
         $.ajax({
             url:'/auth/forgot-password',

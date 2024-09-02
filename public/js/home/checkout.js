@@ -151,22 +151,22 @@ $(document).ready(function(){
 
 
     $('#add_address').on('click', function() {
-        $('#editAddressModal').modal('show');
+        $('#addAddressModal').modal('show');
     });
 
     $('#save_deliver').on('click', function() {
         var formData = $('#address_form').serialize(); // Serialize form data
 
         $.ajax({
-            url:'/user/address-store', // URL for the server-side endpoint
+            url:'/user/address-store',
             type: 'POST',
             data: formData,
             success: function(response) {
-                $('#addNewAdderessModal').modal('hide'); // Hide the modal
-                // Optionally, update the address list or refresh the page
+                if(response.success === true){
+                    $('#addNewAdderessModal').modal('hide');
+                }
             },
             error: function(xhr, status, error) {
-                // Handle error
                 alert('An error occurred. Please try again.');
             }
         });

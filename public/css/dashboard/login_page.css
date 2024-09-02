@@ -1,0 +1,19 @@
+/* Centering the container */
+.login-card {
+    background-color: #f6c7c7;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+}
+
+.login-card h2 {
+    color: #333;
+}
+
+.login-card .form-control {
+    border-radius: 0.25rem;
+}
+
+.login-card .btn-primary {
+    border-radius: 0.25rem;
+}

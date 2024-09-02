@@ -8,7 +8,7 @@ $(document).ready(function(){
     $('#create_category').on('click', function() {
         $('#createCategoryModal').modal('show');
     });
-    
+
     $('#add_category').on('click', function() {
         let formData = new FormData($('#createCategoryForm')[0]);
         $.ajax({
@@ -22,23 +22,23 @@ $(document).ready(function(){
                     console.log(response);
                     $('#createCategoryForm')[0].reset();
                     $('#createCategoryModal').modal('hide');
-                    
+
                     let category = response.category;
                     console.log(category);
-    
+
                     // Corrected string concatenation for image path
                     let row = `<tr data-id="${category.id}">
-                                <td>${category.id}</td>
-                                <td>${category.name}</td>
-                                <td>${category.slug}</td>
-                                <td>${category.description}</td>
-                                <td class="category_image"><img src="${category.image}" alt="${category.name}" width="70px"></td>
-                                <td>
-                                    <button class="btn btn-primary btn-sm" data-bs-target="#viewCategoryModal" data-bs-toggle="modal">View</button>
-                                    <button class="btn btn-secondary btn-sm" data-bs-target="#editCategoryModal" data-bs-toggle="modal">Edit</button>
-                                    <button class="btn btn-danger btn-sm delete-btn" data-bs-target="#deleteCategoryModal" data-bs-toggle="modal">Delete</button>
-                                </td>
-                            </tr>`;
+                    <td>${category.id}</td>
+                    <td>${category.name}</td>
+                    <td>${category.slug}</td>
+                    <td style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${category.description}</td>
+                    <td class="category_image"><img src="${category.image}" alt="${category.name}" width="70px"></td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" data-bs-target="#viewCategoryModal" data-bs-toggle="modal">View</button>
+                        <button class="btn btn-secondary btn-sm" data-bs-target="#editCategoryModal" data-bs-toggle="modal">Edit</button>
+                        <button class="btn btn-danger btn-sm delete-btn" data-bs-target="#deleteCategoryModal" data-bs-toggle="modal">Delete</button>
+                    </td>
+                </tr>`;
                     $('#categories_table tbody').append(row);
                 } else {
                     alert('Category creation failed.');

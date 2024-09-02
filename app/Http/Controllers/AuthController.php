@@ -17,13 +17,71 @@ use Illuminate\Support\Facades\Mail;
 class AuthController extends Controller
 {
 
+    public function register(Request $request)
+    {
+        $data = $request->all();
+        $rules = [
+            'name' => 'required|string|max:25',
+            'email' => 'required|string|email|max:255|unique:users,email',
+            'password' => 'required|string|min:8|confirmed',
+            'password_confirmation' => 'required',
+            'phone_number' => 'required|numeric',
+            'role_id' => 'nullable|exists:roles,id', // role_id is now optional
+        ];
+
+        $validator = Validator::make($data, $rules);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation Errors',
+                'errors' => $validator->errors()->all(),
+            ], 200);
+        }
+
+        try {
+            // Create the user
+            $user = User::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => bcrypt($data['password']),
+                'phone_number' => $data['phone_number'],
+            ]);
+
+            // Attach the role to the user if role_id is present
+            if (isset($data['role_id'])) {
+                $user->roles()->attach($data['role_id']);
+            }
+
+            // Send a registration email
+            if ($user) {
+                Mail::to($user->email)->send(new UserRegistered($user));
+                return response()->json([
+                    'success' => true,
+                ], 200);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Failed to create user.',
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::error('User registration failed: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to create user.',
+            ]);
+        }
+    }
+
+
     public function login(Request $request)
     {
         $data = $request->only('login_email', 'login_password', 'remember_me');
-        
+
         $rules = [
             'login_email' => 'required|exists:users,email',
-            'login_password' => 'required|min:8'
+            'login_password' => 'required|min:8',
         ];
 
         $validator = Validator::make($data, $rules);
@@ -65,12 +123,25 @@ class AuthController extends Controller
             // Optionally clear the session cart
             session()->forget('cart');
 
-            $remember_token = $user->remember_token;
-            $redirectUrl = $user->role === 'admin' ? '/adminPage' : '/';
+            // Fetch user's role
+            $role = $user->roles()->first()->name ?? 'user'; // Adjust if your role relation differs
+
+            // Determine the redirect URL based on role
+            switch ($role) {
+                case 'Product Manager':
+                    $redirectUrl = '/products/index';
+                    break; // Added break to avoid falling through to next case
+                case 'Super Admin':
+                    $redirectUrl = '/adminPage';
+                    break; // Added break to avoid falling through to next case
+                default:
+                    $redirectUrl = '/'; // Default redirect for roles not explicitly handled
+            }
+
             return response()->json([
                 'success' => true,
                 'redirect_url' => $redirectUrl,
-                'remember_token' => $remember_token
+                'remember_token' => $user->remember_token
             ]);
         }
 
@@ -81,67 +152,14 @@ class AuthController extends Controller
     }
 
 
-    public function register(Request $request)
-    { 
-        $data = $request->all();
-        $rules = [
-            'name' => 'required|string|max:25',
-            'email' => 'required|string|email|max:255|unique:users,email',
-            'password' => 'required|string|min:8|confirmed',
-            'password_confirmation' => 'required',
-            'phone_number' => 'required|numeric',
-        ];
-
-        $validator = Validator::make($data, $rules);
-        
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Validation Errors',
-                'errors' => $validator->errors()->all(),
-            ], 200);
-        }
-        
-        try {
-            $user = User::create([
-                'name' => $data['name'],
-                'email' => $data['email'],
-                'password' => bcrypt($data['password']),
-                'phone_number' => $data['phone_number'],
-                'role' => 1
-            ]);
-
-            if ($user) {
-                Mail::to($user->email)->send(new UserRegistered($user));
-                return response()->json([
-                    'success' => true,
-                ], 200);
-            } else {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Failed to create user.',
-                ]);
-            }
-        } catch (\Exception $e) {
-            Log::error('User registration failed: ' . $e->getMessage());
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to create user.',
-            ]);
-        }
-    }
-
-    public function logout()
+    public function logout(Request $request)
     {
-        
+        // Log out the user
         Auth::logout();
-        // $cookie = Cookie::forget('remember_web_' . config('app.key'));
-        return response()->json([
-            'success' => true,
-            'message' => 'You are logged out successfully',
-            'redirect_url' => '/',
-        ]);
+        // Redirect to the home page or login page
+        return redirect()->route('home');
     }
+
 
     public function showForgotPassword()
     {
@@ -163,6 +181,7 @@ class AuthController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'email is not valid',
+                'errors' => $validator->errors()->all()
             ]);
         }
 
@@ -173,7 +192,8 @@ class AuthController extends Controller
         $user = User::where('email',$email)->first();
 
         $user->otp = $otp;
-        $user->otp_expires_at = now()->addMinutes(1);
+
+        $user->otp_expires_at = now()->addMinutes(10);
         $user->save();
 
         $otp = $user->otp;
@@ -190,38 +210,38 @@ class AuthController extends Controller
     public function verifyOtp(Request $request)
     {
         $data = $request->all();
-    
+
         $rules = [
             'otp' => 'required|digits:6',
         ];
-    
+
         $validator = Validator::make($data, $rules);
-    
+
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
                 'message' => 'OTP is not valid',
                 'errors' => $validator->errors(),
-            ], 422);  // 
+            ], 422);  //
         }
-    
+
         $otp = $data['otp'];
-    
+
         $user = User::where('otp', $otp)->first();
-    
+
         if (!$user) {
             return response()->json([
                 'success' => false,
                 'message' => 'Invalid OTP',
-            ], 404);  
+            ], 404);
         }
-    
+
         if ($user->otp_expires_at < now()) {
             return response()->json([
                 'success' => false,
                 'message' => 'OTP has expired',
-            ], 403);  
-    
+            ], 403);
+
         }
 
         $user->otp = null;  // Optionally clear the OTP
@@ -234,7 +254,7 @@ class AuthController extends Controller
             'message' => 'OTP verified successfully',
             'user' => $user,
             'redirectUrl' => $redirectUrl
-        ], 200);  // Return success response with user data  
+        ], 200);  // Return success response with user data
     }
 
     public function passwordResetForm(){
@@ -254,7 +274,7 @@ class AuthController extends Controller
         if($validator->fails()){
             return response()->json([
                 'success' => false,
-                'message' => $validator->errors()->first(), 
+                'message' => $validator->errors()->first(),
             ]);
         }
 
@@ -279,6 +299,10 @@ class AuthController extends Controller
         }
     }
 
-    
+
+    public function loginPage(){
+        return view('Dashboard.login_page');
+    }
+
 
 }

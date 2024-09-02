@@ -17,9 +17,8 @@
 
 @section('content')
 
-<div id="container">
-    <h1>Your Cart</h1>
-    <div class="row">
+<div class="container">
+    <div class="row justify-content-center">
         @guest
             <div class="col-md-8">
                 @forelse($cartItems as $item)
@@ -49,10 +48,12 @@
                         </div>
                     </div>
                 @empty
-                    <div class="alert alert-info text-center">
-                        <h4 class="alert-heading">Your Cart is Empty</h4>
-                        <p class="mb-0">It looks like you have no items in your cart. Browse our products and add some items to your cart to continue shopping.</p>
-                        <a href="{{ route('home') }}" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">Shop Now</a>
+                    <div class="d-flex justify-content-center align-items-center flex-column" style="height: 300px;">
+                        <div class="alert alert-info text-center">
+                            <h4 class="alert-heading">Your Cart is Empty</h4>
+                            <p class="mb-0">It looks like you have no items in your cart. Browse our products and add some items to your cart to continue shopping.</p>
+                            <a href="{{ route('home') }}" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">Shop Now</a>
+                        </div>
                     </div>
                 @endforelse
             </div>
@@ -85,10 +86,12 @@
                         </div>
                     </div>
                 @empty
-                    <div class="alert alert-info text-center">
-                        <h4 class="alert-heading">Your Cart is Empty</h4>
-                        <p class="mb-0">It looks like you have no items in your cart. Browse our products and add some items to your cart to continue shopping.</p>
-                        <a href="{{ route('home') }}" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">Shop Now</a>
+                    <div class="d-flex justify-content-center align-items-center flex-column" style="height: 300px;">
+                        <div class="alert alert-info text-center">
+                            <h4 class="alert-heading">Your Cart is Empty</h4>
+                            <p class="mb-0">It looks like you have no items in your cart. Browse our products and add some items to your cart to continue shopping.</p>
+                            <a href="{{ route('home') }}" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">Shop Now</a>
+                        </div>
                     </div>
                 @endforelse
             </div>

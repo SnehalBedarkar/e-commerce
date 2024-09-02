@@ -1,8 +1,8 @@
-<div class="modal fade" id="addNewAddressModal" tabindex="-1" aria-labelledby="addNewAddressModalLabel" aria-hidden="true">
+<div class="modal fade" id="addAddressModal" tabindex="-1" aria-labelledby="addAddressModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="addNewAddressModalLabel">Change Address</h1>
+          <h1 class="modal-title fs-5" id="addAddressModalLabel">Change Address</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -49,7 +49,7 @@
                 <div class="flex-fill ms-2">
                     <div class="form-group mb-3">
                         <label for="state" class="form-label">State</label>
-                        <select name="state" id="state" class="form-select">
+                        <select name="state" id="state" class="form-select " size="5" aria-label="size 5 select example">
                             <option value="">Select a State</option>
                             <option value="AN">Andaman and Nicobar Islands</option>
                             <option value="AP">Andhra Pradesh</option>
@@ -89,7 +89,7 @@
                             <option value="WB">West Bengal</option>
                         </select>
                     </div>
-                    
+
                 </div>
             </div>
             <div class="d-flex mb-3">
@@ -220,7 +220,7 @@
                             <option value="WB">West Bengal</option>
                         </select>
                     </div>
-                    
+
                 </div>
             </div>
             <div class="d-flex mb-3">

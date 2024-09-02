@@ -19,3 +19,52 @@ body{
 #name{
     padding:inherit;
 }
+
+/* Custom card header styling */
+.card-header {
+    padding: 10px 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Styling for address items */
+.address-item {
+    background-color: #f9f9f9;
+    transition: background-color 0.3s ease;
+}
+
+.address-item:hover {
+    background-color: #f1f1f1;
+}
+
+/* Radio button customization */
+.form-check-input {
+    accent-color: #007bff; /* Set the color of the radio button */
+}
+
+/* Button styling inside address items */
+.edit-btn {
+    font-size: 12px;
+    padding: 5px 10px;
+}
+
+.edit-btn:hover {
+    background-color: #0056b3;
+    color: #fff;
+}
+
+/* Mobile responsiveness for address items */
+@media (max-width: 576px) {
+    .address-item {
+        flex-direction: column;
+        text-align: left;
+    }
+
+    .address-item .col-1, .address-item .col-8, .address-item .col-2, .address-item .col-1.text-end {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .edit-btn {
+        margin-top: 10px;
+    }
+}
